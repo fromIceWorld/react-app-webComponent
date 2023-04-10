@@ -1,25 +1,35 @@
-import logo from './logo.svg';
+import React from 'react';
+import { LineChart } from './components/line-chart';
 import './App.css';
+const count = 0;
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+    state = { date: new Date() };
+
+    tick() {
+        this.setState({
+            date: new Date(),
+        });
+    }
+    componentDidMount() {
+        console.log(this.myRefs);
+        this.timerID = setInterval(() => this.tick(), 1000);
+    }
+    componentWillUnmount() {
+        clearInterval(this.timerID);
+    }
+    render() {
+        return (
+            <div className="App" ref="app">
+                <span>REACT{count}</span>
+                <span>
+                    <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+                </span>
+                <LineChart />
+                <line-chart></line-chart>
+            </div>
+        );
+    }
 }
 
 export default App;
