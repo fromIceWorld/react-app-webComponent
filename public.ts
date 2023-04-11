@@ -7,7 +7,7 @@ const components = [
         {
             id: 'line-chart',
             type: 'node',
-            icon: 'partition',
+            icon: 'area-chart',
             title: `折线图:
                         react@18+echarts`,
             view: 3,
@@ -24,9 +24,9 @@ const http = require('http'),
 const filesName = [
     {
         decorator: { defer: true },
-        name: 'main.a1467af8.js',
+        name: 'main.js',
     },
-    'main.073c9b0a.css',
+    'main.css',
 ];
 let options = {
     url: 'http://127.0.0.1:3000/upload',

@@ -12,7 +12,6 @@ class App extends React.Component {
         });
     }
     componentDidMount() {
-        console.log(this.myRefs);
         this.timerID = setInterval(() => this.tick(), 1000);
     }
     componentWillUnmount() {

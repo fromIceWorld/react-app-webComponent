@@ -2,101 +2,25 @@ const LINE_CHART_CONFIG = {
     className: 'LineChart',
     tag: '',
     html: {
-        bordered: {
-            type: 'boolean',
-            value: false,
-        },
-        loading: {
-            type: 'boolean',
-            value: false,
-        },
-        pagination: {
-            type: 'boolean',
-            value: false,
-        },
-        sizeChanger: {
-            type: 'boolean',
-            value: false,
-        },
         title: {
-            type: 'boolean',
-            value: false,
+            type: 'string',
+            value: '',
         },
-        header: {
-            type: 'boolean',
-            value: true,
+        width: {
+            type: 'string',
+            value: '400px',
         },
-        footer: {
-            type: 'boolean',
-            value: false,
+        height: {
+            type: 'string',
+            value: '200px',
         },
-        expandable: {
-            type: 'boolean',
-            value: false,
+        xData: {
+            type: 'json',
+            value: '["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]',
         },
-        checkbox: {
-            type: 'boolean',
-            value: false,
-        },
-        fixHeader: {
-            type: 'boolean',
-            value: false,
-        },
-        noResult: {
-            type: 'boolean',
-            value: false,
-        },
-        ellipsis: {
-            type: 'boolean',
-            value: false,
-        },
-        simple: {
-            type: 'boolean',
-            value: false,
-        },
-        size: {
-            type: 'array',
-            options: [
-                { value: 'default', label: 'Default' },
-                { value: 'middle', label: 'Middle' },
-                { value: 'small', label: 'Small' },
-            ],
-            value: 'default',
-        },
-        tableScroll: {
-            type: 'array',
-            options: [
-                { value: 'unset', label: 'Unset' },
-                { value: 'scroll', label: 'Scroll' },
-                { value: 'fixed', label: 'Fixed' },
-            ],
-            value: 'unset',
-        },
-        tableLayout: {
-            type: 'array',
-            options: [
-                { value: 'auto', label: 'Auto' },
-                { value: 'fixed', label: 'Fixed' },
-            ],
-            value: 'auto',
-        },
-        position: {
-            type: 'array',
-            options: [
-                { value: 'top', label: 'Top' },
-                { value: 'bottom', label: 'Bottom' },
-                { value: 'both', label: 'Both' },
-            ],
-            value: 'top',
-        },
-        headers: {
-            type: 'list',
-            options: ['Name:100', 'Age:100', 'Address'],
-            value: 'Name',
-        },
-        row: {
-            type: 'number',
-            value: 10,
+        series: {
+            type: 'json',
+            value: '[{"name":"销量","type":"line","data":[5,20,36,10,10,20,0]},{"name":"销量2","type":"line","data":[15,30,46,20,20,30]}]',
         },
     },
     css: {
@@ -105,11 +29,8 @@ const LINE_CHART_CONFIG = {
     },
     component: {
         event: [],
-        methods: [
-            { label: 'setList', value: 'setList' },
-            { label: 'setLoading', value: 'setLoading' },
-        ],
-        data: ['list'],
+        methods: [{ label: 'setData', value: 'setData' }],
+        data: ['config'],
         params: [],
     },
 };
