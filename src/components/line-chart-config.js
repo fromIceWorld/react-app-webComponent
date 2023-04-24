@@ -20,7 +20,7 @@ const LINE_CHART_CONFIG = {
         },
         series: {
             type: 'json',
-            value: '[{"name":"销量","type":"line","data":[5,20,36,10,10,20,0]},{"name":"销量2","type":"line","data":[15,30,46,20,20,30]}]',
+            value: '[{"name":"销量","type":"line","data":[5,20,36,10,10,20,0]},{"name":"销量2","type":"line","data":[15,30,46,20,20,30,0]}]',
         },
     },
     css: {
