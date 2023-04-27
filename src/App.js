@@ -1,5 +1,5 @@
 import React from 'react';
-import { LineChart } from './components/line-chart';
+import { LineChart } from './components/line-chart/line-chart';
 import './App.css';
 const count = 0;
 

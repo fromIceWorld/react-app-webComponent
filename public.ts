@@ -16,6 +16,30 @@ const components = [
             des: '基础的折线图',
             component: 'LineChart',
         },
+        {
+            id: 'bar-chart',
+            type: 'node',
+            icon: 'bar-chart',
+            title: `柱状图:
+                        react@18+echarts`,
+            view: 3,
+            family: 'chart',
+            color: '#61dafb',
+            des: '基础的柱状图',
+            component: 'BarChart',
+        },
+        {
+            id: 'pie-chart',
+            type: 'node',
+            icon: 'pie-chart',
+            title: `饼状图:
+                        react@18+echarts`,
+            view: 3,
+            family: 'chart',
+            color: '#61dafb',
+            des: '基础的饼状图',
+            component: 'PieChart',
+        },
     ],
     fileJS = './build/static/js/',
     fileCSS = './build/static/css/';

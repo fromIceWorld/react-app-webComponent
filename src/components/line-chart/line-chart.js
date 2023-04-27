@@ -1,9 +1,9 @@
 import React from 'react';
 import * as echarts from 'echarts';
 import PropTypes from 'prop-types';
-import { config } from '../decorators/config.js';
-import { LINE_CHART_CONFIG } from './line-chart-config';
-import { transformValue } from '../common/index.js';
+import { config } from '../../decorators/config.js';
+import { LINE_CHART_CONFIG } from './line-chart-config.js';
+import { transformValue } from '../../common/index.js';
 
 window['React.Component'] = React.Component;
 @config(LINE_CHART_CONFIG)
@@ -15,8 +15,19 @@ class LineChart extends React.Component {
             width: '400px',
             height: '200px',
             title: '',
-            xData: [],
-            series: [],
+            xData: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            series: [
+                {
+                    name: '销量',
+                    type: 'line',
+                    data: [5, 20, 36, 10, 10, 20, 0],
+                },
+                {
+                    name: '销量2',
+                    type: 'line',
+                    data: [15, 30, 46, 20, 20, 30, 0],
+                },
+            ],
         };
     }
     chart;
