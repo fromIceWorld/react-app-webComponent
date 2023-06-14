@@ -10,7 +10,7 @@ const components = [
             icon: 'area-chart',
             title: `折线图:
                         react@18+echarts`,
-            view: 3,
+            view: 0,
             family: 'chart',
             color: '#61dafb',
             des: '基础的折线图',
@@ -22,7 +22,7 @@ const components = [
             icon: 'bar-chart',
             title: `柱状图:
                         react@18+echarts`,
-            view: 3,
+            view: 0,
             family: 'chart',
             color: '#61dafb',
             des: '基础的柱状图',
@@ -34,7 +34,7 @@ const components = [
             icon: 'pie-chart',
             title: `饼状图:
                         react@18+echarts`,
-            view: 3,
+            view: 0,
             family: 'chart',
             color: '#61dafb',
             des: '基础的饼状图',

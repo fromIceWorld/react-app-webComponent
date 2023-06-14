@@ -125,7 +125,7 @@ class LineChart extends React.Component {
                         super();
                         setTimeout(()=>{
                             let index = Object.keys(this).filter(key=>key.startsWith('__reactContainer'));
-                            let ins = this.that = this[index[0]].child.stateNode;
+                            let ins = this.that = this[index[0]].alternate.child.stateNode;
                             ins.${init}
                         },300);
                     }

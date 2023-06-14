@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import reactToWebComponent from 'react-to-webcomponent';
+import r2wc from 'react-to-webcomponent';
 
 import './index.css';
 import App from './App';
@@ -20,17 +20,17 @@ reportWebVitals();
 // @ts-ignore
 
 console.log('react 应用挂载');
-const LineCharComponent = reactToWebComponent(LineChart, React, ReactDOM);
+const LineCharComponent = r2wc(LineChart, React, ReactDOM);
 window['LineChartComponent'] = LineCharComponent;
 window['LineChart'] = LineChart;
 customElements.define('line-chart', LineCharComponent);
 
-const BarChartComponent = reactToWebComponent(BarChart, React, ReactDOM);
+const BarChartComponent = r2wc(BarChart, React, ReactDOM);
 window['BarChartComponent'] = BarChartComponent;
 window['BarChart'] = BarChart;
 customElements.define('bar-chart', BarChartComponent);
 
-const PieChartComponent = reactToWebComponent(PieChart, React, ReactDOM);
+const PieChartComponent = r2wc(PieChart, React, ReactDOM);
 window['PieChartComponent'] = PieChartComponent;
 window['PieChart'] = PieChart;
 customElements.define('pie-chart', PieChartComponent);

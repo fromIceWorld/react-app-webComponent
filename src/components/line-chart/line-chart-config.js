@@ -26,6 +26,14 @@ const LINE_CHART_CONFIG = {
     css: {
         classes: '',
         style: {},
+        width: {
+            type: 'number',
+            value: 0,
+        },
+        height: {
+            type: 'number',
+            value: 0,
+        },
     },
     component: {
         event: [],
