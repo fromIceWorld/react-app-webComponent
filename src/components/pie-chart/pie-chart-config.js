@@ -6,31 +6,16 @@ const PIE_CHART_CONFIG = {
             type: 'string',
             value: '',
         },
-        width: {
-            type: 'string',
-            value: '400px',
-        },
-        height: {
-            type: 'string',
-            value: '200px',
+        color: {
+            type: 'json',
+            value: "['#5470c6', '#91cc75','#fac858','#ee6666','#73c0de','#3ba272', '#fc8452','#9a60b4','#ea7ccc',]",
         },
         data: {
             type: 'json',
             value: '[{"value":1048,"name":"Search Engine"},{"value":735,"name":"Direct"},{"value":580,"name":"Email"},{"value":484,"name":"Union Ads"}]',
         },
     },
-    css: {
-        classes: '',
-        style: {},
-        width: {
-            type: 'number',
-            value: 0,
-        },
-        height: {
-            type: 'number',
-            value: 0,
-        },
-    },
+    css: {},
     component: {
         event: [],
         methods: [{ label: 'setData', value: 'setData' }],

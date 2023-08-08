@@ -6,13 +6,9 @@ const BAR_CHART_CONFIG = {
             type: 'string',
             value: '',
         },
-        width: {
-            type: 'string',
-            value: '400px',
-        },
-        height: {
-            type: 'string',
-            value: '200px',
+        color: {
+            type: 'json',
+            value: "['#5470c6', '#91cc75','#fac858','#ee6666','#73c0de','#3ba272', '#fc8452','#9a60b4','#ea7ccc',]",
         },
         xData: {
             type: 'json',
@@ -23,20 +19,9 @@ const BAR_CHART_CONFIG = {
             value: '[{"type":"bar","data":[193,234,310,1215,1341,3818,400]},{"type":"bar","data":[193,234,310,1215,1341,4681,400]}]',
         },
     },
-    css: {
-        classes: '',
-        style: {},
-        width: {
-            type: 'number',
-            value: 0,
-        },
-        height: {
-            type: 'number',
-            value: 0,
-        },
-    },
+    css: {},
     component: {
-        event: [],
+        event: [{ label: 'initCompleted', value: 'initCompleted' }],
         methods: [{ label: 'setData', value: 'setData' }],
         data: ['config'],
         params: [],

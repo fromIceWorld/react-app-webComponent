@@ -1,11 +1,11 @@
 import React from 'react';
 import { LineChart } from './components/line-chart/line-chart';
 import './App.css';
-const count = 0;
-
+import { PieChart } from './components/pie-chart/pie-chart';
+import { BarChart } from './components/bar-chart/bar-chart';
+import { BackgroundImage } from './components/background-image/background-image';
 class App extends React.Component {
     state = { date: new Date() };
-
     tick() {
         this.setState({
             date: new Date(),
@@ -19,13 +19,23 @@ class App extends React.Component {
     }
     render() {
         return (
-            <div className="App" ref="app">
-                <span>REACT{count}</span>
-                <span>
-                    <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
-                </span>
-                <LineChart />
-                <line-chart></line-chart>
+            <div className="App" ref="app" style={{ height: '100%' }}>
+                <div style={{ height: '800px' }}>
+                    <china-map-chart></china-map-chart>
+                </div>
+
+                <div style={{ height: '300px' }}>
+                    <LineChart />
+                </div>
+                <div style={{ height: '300px' }}>
+                    <PieChart />
+                </div>
+                <div style={{ height: '300px' }}>
+                    <BarChart />
+                </div>
+                <div style={{ height: '300px' }}>
+                    <BackgroundImage />
+                </div>
             </div>
         );
     }

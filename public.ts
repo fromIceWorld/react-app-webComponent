@@ -40,6 +40,30 @@ const components = [
             des: '基础的饼状图',
             component: 'PieChart',
         },
+        {
+            id: 'china-map',
+            type: 'node',
+            icon: 'heat-map',
+            title: `地图:
+                        react@18+echarts`,
+            view: 4,
+            family: 'chart',
+            color: '#61dafb',
+            des: '基础的地图',
+            component: 'ChinaMapChart',
+        },
+        {
+            id: 'backend-image',
+            type: 'node',
+            icon: 'file-image',
+            title: `背景图:
+                        react@18+echarts`,
+            view: 4,
+            family: 'chart',
+            color: '#61dafb',
+            des: '基础的背景图',
+            component: 'BackgroundImage',
+        },
     ],
     fileJS = './build/static/js/',
     fileCSS = './build/static/css/';
@@ -95,6 +119,7 @@ request(
         },
     },
     (err, res, body) => {
+        console.log('上传', res.statusCode);
         if (res.statusCode === 200) {
             console.log(filesName, res.statusCode, '上传完成');
         }

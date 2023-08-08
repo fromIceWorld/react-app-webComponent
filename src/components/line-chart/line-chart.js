@@ -11,53 +11,114 @@ class LineChart extends React.Component {
     static tagNamePrefix = 'line-chart';
     constructor(props) {
         super(props);
-        this.state = {
-            width: '400px',
-            height: '200px',
-            title: '',
-            xData: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-            series: [
-                {
-                    name: '销量',
-                    type: 'line',
-                    data: [5, 20, 36, 10, 10, 20, 0],
-                },
-                {
-                    name: '销量2',
-                    type: 'line',
-                    data: [15, 30, 46, 20, 20, 30, 0],
-                },
-            ],
-        };
+        this.state = {};
     }
+    xData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    series = [
+        {
+            name: '销量',
+            type: 'line',
+            data: [5, 20, 36, 10, 10, 20, 0],
+        },
+        {
+            name: '销量2',
+            type: 'line',
+            data: [15, 30, 46, 20, 20, 30, 0],
+        },
+    ];
     chart;
-    get height() {
-        return this.heights[0];
-    }
-    set height(value) {
-        this.heights.push(value);
-    }
+    option = {
+        title: {
+            text: 'demo组件',
+        },
+        color: [
+            '#5470c6',
+            '#91cc75',
+            '#fac858',
+            '#ee6666',
+            '#73c0de',
+            '#3ba272',
+            '#fc8452',
+            '#9a60b4',
+            '#ea7ccc',
+        ],
+        tooltip: {
+            trigger: 'axis',
+        },
+        legend: {
+            data: this.series.map((item) => item.name),
+            left: 'right',
+        },
+        grid: [
+            {
+                x: 40,
+                y: 50,
+                x2: 30,
+                y2: 40,
+            },
+        ],
+        xAxis: {
+            data: this.xData,
+        },
+        yAxis: {},
+        series: this.series,
+    };
     // 修改chart 数据
     applyData(config) {
         const option = this.chart.getOption();
-        console.log(option);
-        const { title, xData, series, width, height } = config;
-        this.setState({
-            width: width || '100%',
-            height: height || this.state.height,
-        });
+        const { title, xData, series, color } = config;
         // 应用chart 数据
         option.title[0].text = title || '';
         option.xAxis = {
             data: xData || [],
         };
-        option.legend[0].data = series.map((item) => item.name || '');
         option.series = series || [];
+        option.color = color || [];
         this.chart.setOption(option);
     }
     componentDidMount() {
+        debugger;
+        // 应用web component自定义的数据
+        this.beforeWebComponentInit();
+        // 组件自有逻辑
         this.initChart();
         this.resizeObserver();
+        // web component组件初始化数据后,其他组件事件才可以获取到当前组件内容
+        this.afterWebComponentInit();
+    }
+    // 初始化echarts 之前，将 web component 配置项应用到组件上
+    beforeWebComponentInit() {
+        const container = this.props.container;
+        // option是 extend 的web component 组件特有的属性
+        if (!container || !container.option) {
+            return;
+        }
+        container.that = this;
+        // 使用用户自定义配置项合并chart配置项
+        this.initChartConfig(container.option);
+    }
+    // web components 构造子组件
+    afterWebComponentInit() {
+        const container = this.props.container;
+        // option是 extend 的web component 组件特有的属性
+        if (!container || !container.option) {
+            return;
+        }
+        this.initCompleted();
+    }
+    initChartConfig(config) {
+        const { title, color, xData, series } = config;
+        this.option.title.text = title;
+        this.option.color = color;
+        this.option.xAxis.data = xData;
+        this.option.series = series;
+    }
+    initCompleted(detail) {
+        const container = this.props.container;
+        let customEvent = new CustomEvent('initCompleted', {
+            detail,
+        });
+        container.dispatchEvent(customEvent);
     }
     // 监听容器width，height
     resizeObserver() {
@@ -65,40 +126,15 @@ class LineChart extends React.Component {
         chartObserver.observe(this.refs.lineChart);
     }
     initChart() {
-        let chart = echarts.init(this.refs.lineChart);
-        chart.setOption({
-            title: {
-                text: this.state.title,
-            },
-            tooltip: {
-                trigger: 'axis',
-            },
-            legend: {
-                data: this.state.series.map((item) => item.name),
-                left: 'right',
-            },
-            grid: [
-                {
-                    x: 40,
-                    y: 50,
-                    x2: 30,
-                    y2: 40,
-                },
-            ],
-            xAxis: {
-                data: this.state.xData,
-            },
-            yAxis: {},
-            series: this.state.series,
-        });
-        this.chart = chart;
+        this.chart = echarts.init(this.refs.lineChart);
+        this.chart.setOption(this.option);
     }
     render() {
         return (
             <div
                 className="line-chart"
                 ref="lineChart"
-                style={{ width: this.state.width, height: this.state.height }}
+                style={{ width: '100%', height: '100%' }}
             ></div>
         );
     }
@@ -106,16 +142,15 @@ class LineChart extends React.Component {
         // web component 的索引不能递增，因为索引重置后会重复，而且cache后apply会有冲突。
         const index = String(Math.random()).substring(2),
             tagName = `${LineChart.tagNamePrefix}-${index}`;
-        const { html: config, css, className } = option;
-        console.log('option', option);
-        const init =
-            'applyData({' +
-            Object.keys(config)
+        const { html } = option;
+        const config =
+            '{' +
+            Object.keys(html)
                 .map((key) => {
-                    return `${key} : ${transformValue(config[key])},`;
+                    return `${key} : ${transformValue(html[key])},`;
                 })
                 .join('\n') +
-            '})';
+            '}';
         return {
             tagName: tagName,
             html: `<${tagName}></${tagName}>`,
@@ -123,14 +158,12 @@ class LineChart extends React.Component {
                     that;
                     constructor(){
                         super();
-                        setTimeout(()=>{
-                            let index = Object.keys(this).filter(key=>key.startsWith('__reactContainer'));
-                            let ins = this.that = this[index[0]].alternate.child.stateNode;
-                            ins.${init}
-                        },300);
+                    }
+                    get option(){
+                        return ${config}
                     }
                     get config(){
-                        console.log('config');
+                       return this.that.option
                     }
                     set config(value){
                         console.log('value',value)
@@ -142,11 +175,6 @@ class LineChart extends React.Component {
                 `,
         };
     }
-    static propTypes = {
-        name: PropTypes.string.isRequired,
-    };
 }
-LineChart.propTypes = {
-    name: PropTypes.string.isRequired,
-};
+
 export { LineChart };

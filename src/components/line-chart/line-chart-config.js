@@ -6,13 +6,9 @@ const LINE_CHART_CONFIG = {
             type: 'string',
             value: '',
         },
-        width: {
-            type: 'string',
-            value: '400px',
-        },
-        height: {
-            type: 'string',
-            value: '200px',
+        color: {
+            type: 'json',
+            value: "['#5470c6', '#91cc75','#fac858','#ee6666','#73c0de','#3ba272', '#fc8452','#9a60b4','#ea7ccc',]",
         },
         xData: {
             type: 'json',
@@ -23,20 +19,9 @@ const LINE_CHART_CONFIG = {
             value: '[{"name":"销量","type":"line","data":[5,20,36,10,10,20,0]},{"name":"销量2","type":"line","data":[15,30,46,20,20,30,0]}]',
         },
     },
-    css: {
-        classes: '',
-        style: {},
-        width: {
-            type: 'number',
-            value: 0,
-        },
-        height: {
-            type: 'number',
-            value: 0,
-        },
-    },
+    css: {},
     component: {
-        event: [],
+        event: [{ label: 'initCompleted', value: 'initCompleted' }],
         methods: [{ label: 'setData', value: 'setData' }],
         data: ['config'],
         params: [],
