@@ -42,8 +42,10 @@ class BarChart extends React.Component {
             '#ea7ccc',
         ],
         legend: {
+            show: true,
             data: this.series.map((item) => item.name),
             left: 'right',
+            top: 'top',
         },
         xAxis: {
             type: 'category',
@@ -52,7 +54,13 @@ class BarChart extends React.Component {
         yAxis: {
             type: 'value',
         },
-        grid: [{ left: 50, right: 10, top: 50, bottom: 30 }],
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            top: '10%',
+            containLabel: true,
+        },
         series: this.series,
     };
     // 修改chart 数据
@@ -98,11 +106,17 @@ class BarChart extends React.Component {
         this.initCompleted();
     }
     initChartConfig(config) {
-        const { title, color, xData, series } = config;
-        this.option.title.text = title;
+        const { title, color, xData, series, grid, legend, xAxis, yAxis } =
+            config;
         this.option.color = color;
         this.option.xAxis.data = xData;
         this.option.series = series;
+        this.option.grid = Object.assign(this.option.grid, grid);
+        this.option.legend = Object.assign(this.option.legend, legend);
+        this.option.legend.data = series.map((item) => item.name);
+        this.option.title = Object.assign(this.option.title, title);
+        this.option.xAxis = Object.assign(this.option.xAxis, xAxis);
+        this.option.yAxis = Object.assign(this.option.yAxis, yAxis);
     }
     initCompleted(detail) {
         const container = this.props.container;
@@ -135,14 +149,58 @@ class BarChart extends React.Component {
         const index = String(Math.random()).substring(2),
             tagName = `${BarChart.tagNamePrefix}-${index}`;
         const { html } = option;
-        const config =
-            '{' +
-            Object.keys(html)
+        const config = `{
+            ${Object.keys(html[0].config)
                 .map((key) => {
-                    return `${key} : ${transformValue(html[key])},`;
+                    return `${key} : ${transformValue(html[0].config[key])},`;
                 })
-                .join('\n') +
-            '}';
+                .join('\n')}
+              title:{
+                ${Object.keys(html[1].config)
+                    .map((key) => {
+                        return `${key} : ${transformValue(
+                            html[1].config[key]
+                        )},`;
+                    })
+                    .join('\n')}
+              },
+              grid:{
+                ${Object.keys(html[2].config)
+                    .map((key) => {
+                        return `${key} : ${transformValue(
+                            html[2].config[key]
+                        )},`;
+                    })
+                    .join('\n')}
+              },
+              legend:{
+                ${Object.keys(html[3].config)
+                    .map((key) => {
+                        return `${key} : ${transformValue(
+                            html[3].config[key]
+                        )},`;
+                    })
+                    .join('\n')}
+              },  
+              xAxis:{
+                ${Object.keys(html[4].config)
+                    .map((key) => {
+                        return `${key} : ${transformValue(
+                            html[4].config[key]
+                        )},`;
+                    })
+                    .join('\n')}
+              },  
+              yAxis:{
+                ${Object.keys(html[5].config)
+                    .map((key) => {
+                        return `${key} : ${transformValue(
+                            html[5].config[key]
+                        )},`;
+                    })
+                    .join('\n')}
+              },  
+        }`;
         return {
             tagName: tagName,
             html: `<${tagName}></${tagName}>`,

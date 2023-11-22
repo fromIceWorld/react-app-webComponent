@@ -513,9 +513,9 @@ class ChinaMapChart extends React.Component {
         const { html } = option;
         const config =
             '{' +
-            Object.keys(html)
+            Object.keys(html[0].config)
                 .map((key) => {
-                    return `${key} : ${transformValue(html[key])},`;
+                    return `${key} : ${transformValue(html[0].config[key])},`;
                 })
                 .join('\n') +
             '}';

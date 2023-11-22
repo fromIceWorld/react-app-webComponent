@@ -1,13 +1,16 @@
 const BACKGROUND_IMAGE_CONFIG = {
     className: 'BackgroundImage',
-    tag: '',
-    html: {
-        backgroundImage: {
-            type: 'string',
-            value: `https://react.docschina.org/images/home/conf2021/cover.svg`,
+    html: [
+        {
+            name: '基础配置',
+            config: {
+                backgroundImage: {
+                    type: 'string',
+                    value: `https://react.docschina.org/images/home/conf2021/cover.svg`,
+                },
+            },
         },
-    },
-    css: {},
+    ],
     component: {
         event: [],
         methods: [],

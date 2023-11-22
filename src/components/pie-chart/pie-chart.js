@@ -16,7 +16,8 @@ class PieChart extends React.Component {
     chart;
     option = {
         title: {
-            text: 'demo组件',
+            show: true,
+            text: '',
             left: 'center',
         },
         color: [
@@ -34,28 +35,17 @@ class PieChart extends React.Component {
             trigger: 'item',
         },
         legend: {
+            show: true,
             orient: 'vertical',
-            left: 'left',
+            left: 'right',
+            top: 'top',
         },
+
         series: [
             {
-                name: 'Access From',
                 type: 'pie',
                 radius: '50%',
-                data: [
-                    { value: 1048, name: 'Search Engine' },
-                    { value: 735, name: 'Direct' },
-                    { value: 580, name: 'Email' },
-                    { value: 484, name: 'Union Ads' },
-                    { value: 300, name: 'Video Ads' },
-                ],
-                emphasis: {
-                    itemStyle: {
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)',
-                    },
-                },
+                data: [],
             },
         ],
     };
@@ -99,10 +89,15 @@ class PieChart extends React.Component {
         this.initCompleted();
     }
     initChartConfig(config) {
-        const { title, color, data } = config;
-        this.option.title.text = title;
+        const { title, color, series, legend, grid } = config;
         this.option.color = color;
-        this.option.series[0].data = data || [];
+        // 饼状图的grid在series中设置
+        this.option.series[0] = Object.assign(this.option.series[0], {
+            data: series,
+            ...grid,
+        });
+        this.option.legend = Object.assign(this.option.legend, legend);
+        this.option.title = Object.assign(this.option.title, title);
     }
     initCompleted(detail) {
         const container = this.props.container;
@@ -135,14 +130,40 @@ class PieChart extends React.Component {
         const index = String(Math.random()).substring(2),
             tagName = `${PieChart.tagNamePrefix}-${index}`;
         const { html } = option;
-        const config =
-            '{' +
-            Object.keys(html)
+        const config = `{
+            ${Object.keys(html[0].config)
                 .map((key) => {
-                    return `${key} : ${transformValue(html[key])},`;
+                    return `${key} : ${transformValue(html[0].config[key])},`;
                 })
-                .join('\n') +
-            '}';
+                .join('\n')}
+              title:{
+                ${Object.keys(html[1].config)
+                    .map((key) => {
+                        return `${key} : ${transformValue(
+                            html[1].config[key]
+                        )},`;
+                    })
+                    .join('\n')}
+              },
+              legend:{
+                ${Object.keys(html[2].config)
+                    .map((key) => {
+                        return `${key} : ${transformValue(
+                            html[2].config[key]
+                        )},`;
+                    })
+                    .join('\n')}
+              },  
+              grid:{
+                ${Object.keys(html[3].config)
+                    .map((key) => {
+                        return `${key} : ${transformValue(
+                            html[3].config[key]
+                        )},`;
+                    })
+                    .join('\n')}
+              },  
+        }`;
         return {
             tagName: tagName,
             html: `<${tagName}></${tagName}>`,

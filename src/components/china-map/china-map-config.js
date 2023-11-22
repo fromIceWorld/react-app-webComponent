@@ -1,13 +1,16 @@
 const CHINA_MAP_CONFIG = {
     className: 'ChinaMapChart',
-    tag: '',
-    html: {
-        title: {
-            type: 'string',
-            value: 'demo组件',
+    html: [
+        {
+            name: '基础配置',
+            config: {
+                title: {
+                    type: 'string',
+                    value: 'demo组件',
+                },
+            },
         },
-    },
-    css: {},
+    ],
     component: {
         event: [{ label: 'initCompleted', value: 'initCompleted' }],
         methods: [
