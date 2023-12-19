@@ -7,7 +7,7 @@ const components = [
         {
             id: 'line-chart',
             type: 'node',
-            icon: 'area-chart',
+            icon: '#icon-tubiao-zhexiantu',
             title: `折线图:
                         react@18+echarts`,
             view: 0,
@@ -19,7 +19,7 @@ const components = [
         {
             id: 'bar-chart',
             type: 'node',
-            icon: 'bar-chart',
+            icon: '#icon-zhuzhuangtu',
             title: `柱状图:
                         react@18+echarts`,
             view: 0,
@@ -31,7 +31,7 @@ const components = [
         {
             id: 'pie-chart',
             type: 'node',
-            icon: 'pie-chart',
+            icon: '#icon-bingzhuangtu',
             title: `饼状图:
                         react@18+echarts`,
             view: 0,
@@ -43,7 +43,7 @@ const components = [
         {
             id: 'china-map',
             type: 'node',
-            icon: 'heat-map',
+            icon: '#icon-a-2',
             title: `地图:
                         react@18+echarts`,
             view: 4,
@@ -55,7 +55,7 @@ const components = [
         {
             id: 'backend-image',
             type: 'node',
-            icon: 'file-image',
+            icon: '#icon-beijing',
             title: `背景图:
                         react@18+echarts`,
             view: 4,
@@ -67,7 +67,8 @@ const components = [
     ],
     fileJS = './build/static/js/',
     fileCSS = './build/static/css/';
-const http = require('http'),
+const fs = require('fs'),
+    path = require('path'),
     request = require('request');
 const filesName = [
     {
@@ -76,52 +77,60 @@ const filesName = [
     },
     'main.css',
 ];
+const area = 'react',
+    folderPath = './dist';
+components.map((item) => {
+    item['filesName'] = filesName;
+    item['area'] = area;
+});
 let options = {
     url: 'http://127.0.0.1:3000/upload',
     method: 'POST',
     json: true,
     headers: {
-        'content-type': 'application/json',
+        'content-type': 'multipart/form-data',
     },
-    body: {},
-};
-let files = [],
-    area = 'react';
-filesName.forEach((fileName) => {
-    let name = typeof fileName == 'string' ? fileName : fileName.name;
-    let content = require('fs').readFileSync(
-        (name.endsWith('.js') ? fileJS : fileCSS) + name
-    );
-    let buffer = Buffer.from(content);
-    //@ts-ignore
-    files.push({
-        name,
-        content: buffer.toString(),
-    });
-});
-let componentsConfig = components.map((item) => {
-    return {
-        ...item,
-        filesName,
+    formData: {
+        files: [],
         area,
-    };
-});
-request(
-    {
-        ...options,
-        body: {
-            code: 200,
-            data: {
-                components: componentsConfig,
-                content: files,
-                area,
-            },
-        },
+        components: JSON.stringify(components),
     },
-    (err, res, body) => {
-        console.log('上传', res.statusCode);
-        if (res.statusCode === 200) {
-            console.log(filesName, res.statusCode, '上传完成');
+};
+// 递归遍历文件夹中的所有文件
+function uploadFolder(folderPath, dir) {
+    const files = fs.readdirSync(folderPath);
+    files.forEach((file) => {
+        const filePath = folderPath + '/' + file;
+        // 判断是否为文件夹
+        if (fs.statSync(filePath).isDirectory()) {
+            // 递归上传子文件夹
+            uploadFolder(filePath, dir + '/' + file);
+        } else {
+            // 上传文件
+            uploadFile(filePath, dir, file);
         }
+    });
+}
+
+// 缓存上传文件
+function uploadFile(filePath, dir, fileName) {
+    const content = fs.readFileSync(path.resolve(__dirname, filePath));
+    // @ts-ignore
+    options.formData.files.push({
+        content: Buffer.from(content).toString(),
+        dir,
+        fileName,
+    });
+}
+// 将文件缓存
+uploadFolder(folderPath, '');
+console.log('共上传文件数：', options.formData.files.length);
+//@ts-ignore
+options.formData.files = JSON.stringify(options.formData.files);
+request(options, (err, res, body) => {
+    if (res.statusCode === 200) {
+        console.log('上传完成');
+    } else {
+        console.log(body);
     }
-);
+});
