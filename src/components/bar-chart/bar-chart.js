@@ -2,7 +2,7 @@ import React from 'react';
 import * as echarts from 'echarts';
 import { config } from '../../decorators/config.js';
 import { BAR_CHART_CONFIG } from './bar-chart-config.js';
-import { transformValue } from '../../common/index.js';
+import { transform, assign } from '../../common/index.js';
 
 window['React.Component'] = React.Component;
 @config(BAR_CHART_CONFIG)
@@ -12,47 +12,54 @@ class BarChart extends React.Component {
         super(props);
         this.state = {};
     }
-    xData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    series = [
-        {
-            type: 'bar',
-            name: '石家庄',
-            data: [193, 234, 310, 1215, 1341, 3818, 400],
-        },
-        {
-            type: 'bar',
-            name: '北京',
-            data: [193, 234, 310, 1215, 1341, 4681, 400],
-        },
-    ];
     chart;
     option = {
         title: {
-            text: 'demo组件',
+            show: false,
+            text: 'title',
+            link: '',
+            left: '10px',
+            top: '10px',
+            right: 'auto',
+            bottom: 'auto',
         },
         color: [
-            '#5470c6',
-            '#91cc75',
-            '#fac858',
-            '#ee6666',
-            '#73c0de',
-            '#3ba272',
-            '#fc8452',
-            '#9a60b4',
-            '#ea7ccc',
+            '#f48282',
+            '#f8de83',
+            '#9dc9ff',
+            '#a2d5ea',
+            '#b8c5dd',
+            '#5c81b1',
+            '#f7c0c0',
+            '#b4d0e8',
+            '#f1a26e',
         ],
+        tooltip: {
+            show: true,
+            orient: 'vertical',
+            left: 'auto',
+            right: '10px',
+            top: 'center',
+            bottom: 'auto',
+            align: 'right',
+            trigger: 'axis',
+            data: [],
+        },
         legend: {
             show: true,
-            data: this.series.map((item) => item.name),
-            left: 'right',
-            top: 'top',
-        },
-        xAxis: {
-            type: 'category',
-            data: this.xData,
-        },
-        yAxis: {
-            type: 'value',
+            orient: 'vertical',
+            left: 'auto',
+            right: '10px',
+            top: 'center',
+            bottom: 'auto',
+            align: 'right',
+            data: [
+                'Email',
+                'Union Ads',
+                'Video Ads',
+                'Direct',
+                'Search Engine',
+            ],
         },
         grid: {
             left: '3%',
@@ -60,21 +67,32 @@ class BarChart extends React.Component {
             bottom: '3%',
             top: '10%',
             containLabel: true,
+        }, //边距
+        xAxis: {
+            type: 'value',
+            data: [],
         },
-        series: this.series,
+        yAxis: {
+            type: 'category',
+            value: ['Brazil', 'Indonesia', 'USA', 'India', 'China', 'World'],
+        },
+        series: [
+            {
+                name: '2011',
+                type: 'bar',
+                data: [18203, 23489, 29034, 104970, 131744, 630230],
+            },
+            {
+                name: '2012',
+                type: 'bar',
+                data: [19325, 23438, 31000, 121594, 134141, 681807],
+            },
+        ],
     };
     // 修改chart 数据
     applyData(config) {
         const option = this.chart.getOption();
-        const { title, xData, series, color } = config;
-        // 应用chart 数据
-        option.title[0].text = title || '';
-        option.xAxis = {
-            data: xData || [],
-        };
-        option.series = series || [];
-        option.color = color || [];
-        this.chart.setOption(option);
+        this.chart.setOption(assign(option, config));
     }
     componentDidMount() {
         // 应用web component自定义的数据
@@ -106,17 +124,7 @@ class BarChart extends React.Component {
         this.initCompleted();
     }
     initChartConfig(config) {
-        const { title, color, xData, series, grid, legend, xAxis, yAxis } =
-            config;
-        this.option.color = color;
-        this.option.xAxis.data = xData;
-        this.option.series = series;
-        this.option.grid = Object.assign(this.option.grid, grid);
-        this.option.legend = Object.assign(this.option.legend, legend);
-        this.option.legend.data = series.map((item) => item.name);
-        this.option.title = Object.assign(this.option.title, title);
-        this.option.xAxis = Object.assign(this.option.xAxis, xAxis);
-        this.option.yAxis = Object.assign(this.option.yAxis, yAxis);
+        this.option = assign(this.option, config);
     }
     initCompleted(detail) {
         const container = this.props.container;
@@ -149,58 +157,14 @@ class BarChart extends React.Component {
         const index = String(Math.random()).substring(2),
             tagName = `${BarChart.tagNamePrefix}-${index}`;
         const { html } = option;
-        const config = `{
-            ${Object.keys(html[0].config)
-                .map((key) => {
-                    return `${key} : ${transformValue(html[0].config[key])},`;
-                })
-                .join('\n')}
-              title:{
-                ${Object.keys(html[1].config)
-                    .map((key) => {
-                        return `${key} : ${transformValue(
-                            html[1].config[key]
-                        )},`;
-                    })
-                    .join('\n')}
-              },
-              grid:{
-                ${Object.keys(html[2].config)
-                    .map((key) => {
-                        return `${key} : ${transformValue(
-                            html[2].config[key]
-                        )},`;
-                    })
-                    .join('\n')}
-              },
-              legend:{
-                ${Object.keys(html[3].config)
-                    .map((key) => {
-                        return `${key} : ${transformValue(
-                            html[3].config[key]
-                        )},`;
-                    })
-                    .join('\n')}
-              },  
-              xAxis:{
-                ${Object.keys(html[4].config)
-                    .map((key) => {
-                        return `${key} : ${transformValue(
-                            html[4].config[key]
-                        )},`;
-                    })
-                    .join('\n')}
-              },  
-              yAxis:{
-                ${Object.keys(html[5].config)
-                    .map((key) => {
-                        return `${key} : ${transformValue(
-                            html[5].config[key]
-                        )},`;
-                    })
-                    .join('\n')}
-              },  
-        }`;
+        const config = JSON.stringify(
+            html.reduce((pre, cur) => {
+                return {
+                    ...pre,
+                    ...transform(cur.config),
+                };
+            }, {})
+        );
         return {
             tagName: tagName,
             html: `<${tagName}></${tagName}>`,

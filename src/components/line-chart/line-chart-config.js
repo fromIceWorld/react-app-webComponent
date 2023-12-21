@@ -3,164 +3,238 @@ const LINE_CHART_CONFIG = {
     tag: '',
     html: [
         {
-            name: '基础配置',
+            name: '颜色配置',
             config: {
                 color: {
                     type: 'colors',
                     value: [
-                        '#5470c6',
-                        '#91cc75',
-                        '#fac858',
-                        '#ee6666',
-                        '#73c0de',
-                        '#3ba272',
-                        '#fc8452',
-                        '#9a60b4',
-                        '#ea7ccc',
+                        '#f48282',
+                        '#f8de83',
+                        '#9dc9ff',
+                        '#a2d5ea',
+                        '#b8c5dd',
+                        '#5c81b1',
+                        '#f7c0c0',
+                        '#b4d0e8',
+                        '#f1a26e',
                     ],
-                },
-                xData: {
-                    type: 'json',
-                    value: '["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]',
-                },
-                series: {
-                    type: 'json',
-                    value: '[{"name":"销量","type":"line","data":[5,20,36,10,10,20,0]},{"name":"销量2","type":"line","data":[15,30,46,20,20,30,0]}]',
                 },
             },
         },
         {
-            name: 'title',
+            name: 'title配置项',
             config: {
-                show: {
-                    type: 'boolean',
-                    value: true,
-                },
-                text: {
-                    type: 'string',
-                    value: '',
-                },
-                link: {
-                    type: 'string',
-                    value: '',
-                },
-                left: {
-                    type: 'select',
-                    options: [
-                        { label: 'left', value: 'left' },
-                        { label: 'right', value: 'right' },
-                        { label: 'center', value: 'center' },
-                    ],
-                    value: 'left',
-                },
-                top: {
-                    type: 'select',
-                    options: [
-                        { label: 'top', value: 'top' },
-                        { label: 'middle', value: 'middle' },
-                        { label: 'bottom', value: 'bottom' },
-                    ],
-                    value: 'top',
+                title: {
+                    type: 'object-config',
+                    value: {
+                        show: {
+                            type: 'boolean',
+                            value: false,
+                        },
+                        text: {
+                            type: 'string',
+                            value: 'title',
+                        },
+                        link: {
+                            type: 'string',
+                            value: '',
+                        },
+                        left: {
+                            type: 'extend-select',
+                            options: [
+                                { label: 'auto', value: 'auto' },
+                                { label: 'left', value: 'left' },
+                                { label: 'right', value: 'right' },
+                                { label: 'center', value: 'center' },
+                            ],
+                            value: '10px',
+                        },
+
+                        top: {
+                            type: 'extend-select',
+                            options: [
+                                { label: 'auto', value: 'auto' },
+                                { label: 'top', value: 'top' },
+                                { label: 'middle', value: 'middle' },
+                                { label: 'bottom', value: 'bottom' },
+                            ],
+                            value: '10px',
+                        },
+                        right: {
+                            type: 'extend-select',
+                            options: [
+                                { label: 'auto', value: 'auto' },
+                                { label: 'left', value: 'left' },
+                                { label: 'right', value: 'right' },
+                                { label: 'center', value: 'center' },
+                            ],
+                            value: 'auto',
+                        },
+                        bottom: {
+                            type: 'extend-select',
+                            options: [
+                                { label: 'auto', value: 'auto' },
+                                { label: 'top', value: 'top' },
+                                { label: 'middle', value: 'middle' },
+                                { label: 'bottom', value: 'bottom' },
+                            ],
+                            value: 'auto',
+                        },
+                    },
                 },
             },
         },
         {
-            name: '边距',
+            name: '边距配置项',
             config: {
-                left: {
-                    type: 'slider',
-                    value: 3,
-                    min: 0,
-                    max: 100,
-                    postfix: '%',
-                },
-                top: {
-                    type: 'slider',
-                    value: 10,
-                    min: 0,
-                    max: 100,
-                    postfix: '%',
-                },
-                right: {
-                    type: 'slider',
-                    value: 4,
-                    min: 0,
-                    max: 100,
-                    postfix: '%',
-                },
-                bottom: {
-                    type: 'slider',
-                    value: 3,
-                    min: 0,
-                    max: 100,
-                    postfix: '%',
+                grid: {
+                    type: 'object-config',
+                    value: {
+                        left: {
+                            type: 'slider',
+                            value: 3,
+                            min: 0,
+                            max: 100,
+                            postfix: '%',
+                        },
+                        top: {
+                            type: 'slider',
+                            value: 10,
+                            min: 0,
+                            max: 100,
+                            postfix: '%',
+                        },
+                        right: {
+                            type: 'slider',
+                            value: 4,
+                            min: 0,
+                            max: 100,
+                            postfix: '%',
+                        },
+                        bottom: {
+                            type: 'slider',
+                            value: 3,
+                            min: 0,
+                            max: 100,
+                            postfix: '%',
+                        },
+                    },
                 },
             },
         },
         {
-            name: '图例',
+            name: '图例配置项',
             config: {
-                show: {
-                    type: 'boolean',
-                    value: true,
-                },
-                left: {
-                    type: 'extend-select',
-                    options: [
-                        { label: 'left', value: 'left' },
-                        { label: 'right', value: 'right' },
-                        { label: 'center', value: 'center' },
-                        { label: 'null', value: null },
-                    ],
-                    value: 'right',
-                },
-                right: {
-                    type: 'extend-select',
-                    options: [
-                        { label: 'left', value: 'left' },
-                        { label: 'right', value: 'right' },
-                        { label: 'center', value: 'center' },
-                        { label: 'null', value: null },
-                    ],
-                    value: 'right',
-                },
-                top: {
-                    type: 'extend-select',
-                    options: [
-                        { label: 'top', value: 'top' },
-                        { label: 'middle', value: 'middle' },
-                        { label: 'bottom', value: 'bottom' },
-                        { label: 'null', value: null },
-                    ],
-                    value: 'top',
-                },
-                bottom: {
-                    type: 'extend-select',
-                    options: [
-                        { label: 'top', value: 'top' },
-                        { label: 'middle', value: 'middle' },
-                        { label: 'bottom', value: 'bottom' },
-                        { label: 'null', value: null },
-                    ],
-                    value: 'bottom',
+                legend: {
+                    type: 'object-config',
+                    value: {
+                        show: {
+                            type: 'boolean',
+                            value: false,
+                        },
+                        orient: {
+                            type: 'select',
+                            options: [
+                                { label: 'vertical', value: 'vertical' },
+                                { label: 'horizontal', value: 'horizontal' },
+                            ],
+                            value: 'vertical',
+                        },
+                        align: {
+                            type: 'select',
+                            options: [
+                                { label: 'auto', value: 'auto' },
+                                { label: 'left', value: 'left' },
+                                { label: 'right', value: 'right' },
+                            ],
+                            value: 'auto',
+                        },
+                        left: {
+                            type: 'extend-select',
+                            options: [
+                                { label: 'left', value: 'left' },
+                                { label: 'right', value: 'right' },
+                                { label: 'center', value: 'center' },
+                                { label: 'auto', value: 'auto' },
+                            ],
+                            value: 'right',
+                        },
+                        right: {
+                            type: 'extend-select',
+                            options: [
+                                { label: 'left', value: 'left' },
+                                { label: 'right', value: 'right' },
+                                { label: 'center', value: 'center' },
+                                { label: 'auto', value: 'auto' },
+                            ],
+                            value: 'right',
+                        },
+                        top: {
+                            type: 'extend-select',
+                            options: [
+                                { label: 'top', value: 'top' },
+                                { label: 'middle', value: 'middle' },
+                                { label: 'bottom', value: 'bottom' },
+                                { label: 'auto', value: 'auto' },
+                            ],
+                            value: 'top',
+                        },
+                        bottom: {
+                            type: 'extend-select',
+                            options: [
+                                { label: 'top', value: 'top' },
+                                { label: 'middle', value: 'middle' },
+                                { label: 'bottom', value: 'bottom' },
+                                { label: 'auto', value: 'auto' },
+                            ],
+                            value: 'bottom',
+                        },
+                        data: {
+                            type: 'json',
+                            value: '["Email","Union Ads","Video Ads","Direct","Search Engine"]',
+                        },
+                    },
                 },
             },
         },
         {
             name: 'xAxis',
             config: {
-                show: {
-                    type: 'boolean',
-                    value: true,
+                xAxis: {
+                    type: 'object-config',
+                    value: {
+                        show: {
+                            type: 'boolean',
+                            value: true,
+                        },
+                        data: {
+                            type: 'json',
+                            value: '["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]',
+                        },
+                    },
                 },
             },
         },
         {
             name: 'yAxis',
             config: {
-                show: {
-                    type: 'boolean',
-                    value: true,
+                yAxis: {
+                    type: 'object-config',
+                    value: {
+                        show: {
+                            type: 'boolean',
+                            value: true,
+                        },
+                    },
+                },
+            },
+        },
+        {
+            name: 'series',
+            config: {
+                series: {
+                    type: 'json',
+                    value: '[{"name":"Email","type":"line","stack":"Total","showSymbol":false,"smooth":true,"data":[120,132,101,134,90,230,210]},{"name":"Union Ads","type":"line","smooth":true,"lineStyle":{"type":"solid"},"stack":"Total","showSymbol":false,"data":[220,182,191,234,290,330,310]},{"name":"Video Ads","type":"line","smooth":true,"showSymbol":false,"stack":"Total","data":[150,232,201,154,190,330,410]},{"name":"Direct","type":"line","smooth":true,"showSymbol":false,"stack":"Total","data":[320,332,301,334,390,330,320]},{"name":"Search Engine","type":"line","stack":"Total","smooth":true,"showSymbol":false,"data":[820,932,901,934,1290,1330,1320]}]',
                 },
             },
         },

@@ -52,18 +52,18 @@ const components = [
             des: '基础的地图',
             component: 'ChinaMapChart',
         },
-        {
-            id: 'backend-image',
-            type: 'node',
-            icon: '#icon-beijing',
-            title: `背景图:
-                        react@18+echarts`,
-            view: 4,
-            family: 'chart',
-            color: '#61dafb',
-            des: '基础的背景图',
-            component: 'BackgroundImage',
-        },
+        // {
+        //     id: 'backend-image',
+        //     type: 'node',
+        //     icon: '#icon-beijing',
+        //     title: `背景图:
+        //                 react@18+echarts`,
+        //     view: 4,
+        //     family: 'chart',
+        //     color: '#61dafb',
+        //     des: '基础的背景图',
+        //     component: 'BackgroundImage',
+        // },
     ],
     fileJS = './build/static/js/',
     fileCSS = './build/static/css/';

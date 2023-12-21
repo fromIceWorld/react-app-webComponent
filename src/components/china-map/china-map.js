@@ -2,7 +2,7 @@ import React from 'react';
 import * as echarts from 'echarts';
 import { config } from '../../decorators/config.js';
 import { CHINA_MAP_CONFIG } from './china-map-config.js';
-import { transformValue } from '../../common/index.js';
+import { transform } from '../../common/index.js';
 import PropTypes from 'prop-types';
 
 const mapJSON = require('../../assets/json/china.json');
@@ -18,7 +18,7 @@ class ChinaMapChart extends React.Component {
         backgroundColor: '#001938',
         title: {
             text: 'demo组件',
-            show: true,
+            show: false,
         },
         animationDurationUpdate: 0,
         geo: {
@@ -480,14 +480,7 @@ class ChinaMapChart extends React.Component {
         const index = String(Math.random()).substring(2),
             tagName = `${ChinaMapChart.tagNamePrefix}-${index}`;
         const { html } = option;
-        const config =
-            '{' +
-            Object.keys(html[0].config)
-                .map((key) => {
-                    return `${key} : ${transformValue(html[0].config[key])},`;
-                })
-                .join('\n') +
-            '}';
+        const config = JSON.stringify(transform(html[0].config));
         return {
             tagName: tagName,
             html: `<${tagName} _methods="that"></${tagName}>`,

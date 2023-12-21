@@ -3,7 +3,7 @@ import * as echarts from 'echarts';
 import PropTypes from 'prop-types';
 import { config } from '../../decorators/config.js';
 import { PIE_CHART_CONFIG } from './pie-chart-config.js';
-import { transformValue } from '../../common/index.js';
+import { transform, assign } from '../../common/index.js';
 
 window['React.Component'] = React.Component;
 @config(PIE_CHART_CONFIG)
@@ -14,50 +14,88 @@ class PieChart extends React.Component {
         this.state = {};
     }
     chart;
+    carousel = true;
     option = {
         title: {
-            show: true,
-            text: '',
-            left: 'center',
+            show: false,
+            text: 'title',
+            link: '',
+            left: '10px',
+            top: '10px',
+            right: 'auto',
+            bottom: 'auto',
         },
         color: [
-            '#5470c6',
-            '#91cc75',
-            '#fac858',
-            '#ee6666',
-            '#73c0de',
-            '#3ba272',
-            '#fc8452',
-            '#9a60b4',
-            '#ea7ccc',
+            '#f48282',
+            '#f8de83',
+            '#9dc9ff',
+            '#a2d5ea',
+            '#b8c5dd',
+            '#5c81b1',
+            '#f7c0c0',
+            '#b4d0e8',
+            '#f1a26e',
         ],
         tooltip: {
+            show: false,
             trigger: 'item',
         },
         legend: {
-            show: true,
+            show: false,
             orient: 'vertical',
-            left: 'right',
-            top: 'top',
+            left: 'auto',
+            right: '10px',
+            top: 'center',
+            bottom: 'auto',
+            align: 'right',
         },
-
         series: [
             {
                 type: 'pie',
-                radius: '50%',
-                data: [],
+                radius: ['47%', '60%'],
+                labelLine: {
+                    show: false,
+                },
+                label: {
+                    show: false,
+                    position: 'center',
+                },
+                emphasis: {
+                    disabled: false,
+                    label: {
+                        show: true,
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                        formatter: '{x1|{c}}\n{x2|{b}}',
+                        rich: {
+                            x1: {
+                                color: '#7b7b7b',
+                                lineHeight: 20,
+                                fontSize: 20,
+                            },
+                            x2: {
+                                color: '#4d4d4d',
+                                height: 30,
+                                fontSize: 25,
+                            },
+                        },
+                    },
+                },
+                data: [
+                    { value: 1048, name: 'Search Engine' },
+                    { value: 735, name: 'Direct' },
+                    { value: 580, name: 'Email' },
+                    { value: 484, name: 'Union Ads' },
+                ],
             },
         ],
     };
+    carouseIndex = 0;
+    carouselEvent;
     // 修改chart 数据
     applyData(config) {
         const option = this.chart.getOption();
-        const { title, data, color } = config;
-        // 应用chart 数据
-        option.title[0].text = title || option.title[0].text;
-        option.series[0].data = data || [];
-        option.color = color || [];
-        this.chart.setOption(option);
+        this.chart.setOption(assign(option, config));
     }
     componentDidMount() {
         // 应用web component自定义的数据
@@ -89,15 +127,7 @@ class PieChart extends React.Component {
         this.initCompleted();
     }
     initChartConfig(config) {
-        const { title, color, series, legend, grid } = config;
-        this.option.color = color;
-        // 饼状图的grid在series中设置
-        this.option.series[0] = Object.assign(this.option.series[0], {
-            data: series,
-            ...grid,
-        });
-        this.option.legend = Object.assign(this.option.legend, legend);
-        this.option.title = Object.assign(this.option.title, title);
+        this.option = assign(this.option, config);
     }
     initCompleted(detail) {
         const container = this.props.container;
@@ -115,6 +145,44 @@ class PieChart extends React.Component {
         let chart = echarts.init(this.refs.pieChart);
         chart.setOption(this.option);
         this.chart = chart;
+        if (this.carousel) {
+            this.selectPie();
+            this.chart.on('mouseover', (params) => {
+                // 用户鼠标悬浮到某一图形时，停止自动切换并高亮鼠标悬浮的图形
+                clearInterval(this.carouselEvent);
+                this.carouseIndex = params.dataIndex;
+                this.highlightPie();
+            });
+            this.chart.on('mouseout', (params) => {
+                // 用户鼠标移出时，重新开始自动切换
+                if (this.carouselEvent) clearInterval(this.carouselEvent);
+                this.selectPie();
+            });
+        }
+    }
+    selectPie() {
+        this.carouselEvent = setInterval(() => {
+            // 高亮效果切换到下一个图形
+            var dataLen = this.option.series[0].data.length;
+            this.carouseIndex = (this.carouseIndex + 1) % dataLen;
+            this.highlightPie();
+        }, 1500);
+    }
+    highlightPie() {
+        // 取消所有高亮并高亮当前图形
+        this.option.series[0].data.forEach((item, index) => {
+            this.chart.dispatchAction({
+                type: 'downplay',
+                seriesIndex: 0,
+                dataIndex: index,
+            });
+        });
+        // 高亮当前图形
+        this.chart.dispatchAction({
+            type: 'highlight',
+            seriesIndex: 0,
+            dataIndex: this.carouseIndex,
+        });
     }
     render() {
         return (
@@ -129,41 +197,17 @@ class PieChart extends React.Component {
         // web component 的索引不能递增，因为索引重置后会重复，而且cache后apply会有冲突。
         const index = String(Math.random()).substring(2),
             tagName = `${PieChart.tagNamePrefix}-${index}`;
-        const { html } = option;
-        const config = `{
-            ${Object.keys(html[0].config)
-                .map((key) => {
-                    return `${key} : ${transformValue(html[0].config[key])},`;
-                })
-                .join('\n')}
-              title:{
-                ${Object.keys(html[1].config)
-                    .map((key) => {
-                        return `${key} : ${transformValue(
-                            html[1].config[key]
-                        )},`;
-                    })
-                    .join('\n')}
-              },
-              legend:{
-                ${Object.keys(html[2].config)
-                    .map((key) => {
-                        return `${key} : ${transformValue(
-                            html[2].config[key]
-                        )},`;
-                    })
-                    .join('\n')}
-              },  
-              grid:{
-                ${Object.keys(html[3].config)
-                    .map((key) => {
-                        return `${key} : ${transformValue(
-                            html[3].config[key]
-                        )},`;
-                    })
-                    .join('\n')}
-              },  
-        }`;
+        const { html } = option,
+            [color, title, tooltip, legend, grid, series, auto] = html;
+        const autoCarousel = auto.config.auto.value;
+        const config = JSON.stringify({
+            ...transform(color.config),
+            ...transform(title.config),
+            ...transform(tooltip.config),
+            ...transform(legend.config),
+            ...transform(grid.config),
+            ...transform(series.config),
+        });
         return {
             tagName: tagName,
             html: `<${tagName}></${tagName}>`,
@@ -171,6 +215,9 @@ class PieChart extends React.Component {
                     that;
                     constructor(){
                         super();
+                    }
+                    get carousel(){
+                        return ${autoCarousel}
                     }
                     get option(){
                         return ${config}

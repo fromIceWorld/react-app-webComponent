@@ -3,7 +3,7 @@ import * as echarts from 'echarts';
 import PropTypes from 'prop-types';
 import { config } from '../../decorators/config.js';
 import { LINE_CHART_CONFIG } from './line-chart-config.js';
-import { transformValue } from '../../common/index.js';
+import { transform, assign } from '../../common/index.js';
 
 window['React.Component'] = React.Component;
 @config(LINE_CHART_CONFIG)
@@ -16,40 +16,105 @@ class LineChart extends React.Component {
     xData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     series = [
         {
-            name: '销量',
+            name: 'Email',
             type: 'line',
-            data: [5, 20, 36, 10, 10, 20, 0],
+            stack: 'Total',
+            showSymbol: false,
+            smooth: true,
+            areaStyle: {},
+
+            data: [120, 132, 101, 134, 90, 230, 210],
         },
         {
-            name: '销量2',
+            name: 'Union Ads',
             type: 'line',
-            data: [15, 30, 46, 20, 20, 30, 0],
+            smooth: true,
+            lineStyle: {
+                type: 'solid',
+            },
+            stack: 'Total',
+            showSymbol: false,
+
+            data: [220, 182, 191, 234, 290, 330, 310],
+        },
+        {
+            name: 'Video Ads',
+            type: 'line',
+            smooth: true,
+            showSymbol: false,
+
+            stack: 'Total',
+            data: [150, 232, 201, 154, 190, 330, 410],
+        },
+        {
+            name: 'Direct',
+            type: 'line',
+            smooth: true,
+            showSymbol: false,
+
+            stack: 'Total',
+            data: [320, 332, 301, 334, 390, 330, 320],
+        },
+        {
+            name: 'Search Engine',
+            type: 'line',
+            stack: 'Total',
+            smooth: true,
+            showSymbol: false,
+
+            showSymbol: false,
+            smooth: true,
+            data: [820, 932, 901, 934, 1290, 1330, 1320],
         },
     ];
     chart;
     option = {
         title: {
-            text: 'demo组件',
+            show: false,
+            text: 'title',
+            link: '',
+            left: '10px',
+            top: '10px',
+            right: 'auto',
+            bottom: 'auto',
         },
         color: [
-            '#5470c6',
-            '#91cc75',
-            '#fac858',
-            '#ee6666',
-            '#73c0de',
-            '#3ba272',
-            '#fc8452',
-            '#9a60b4',
-            '#ea7ccc',
+            '#f48282',
+            '#f8de83',
+            '#9dc9ff',
+            '#a2d5ea',
+            '#b8c5dd',
+            '#5c81b1',
+            '#f7c0c0',
+            '#b4d0e8',
+            '#f1a26e',
         ],
         tooltip: {
+            show: true,
+            orient: 'vertical',
+            left: 'auto',
+            right: '10px',
+            top: 'center',
+            bottom: 'auto',
+            align: 'right',
             trigger: 'axis',
+            data: [],
         },
         legend: {
             show: true,
-            data: this.series.map((item) => item.name),
-            left: 'right',
-            top: 'top',
+            orient: 'vertical',
+            left: 'auto',
+            right: '10px',
+            top: 'center',
+            bottom: 'auto',
+            align: 'right',
+            data: [
+                'Email',
+                'Union Ads',
+                'Video Ads',
+                'Direct',
+                'Search Engine',
+            ],
         },
         grid: {
             left: '3%',
@@ -59,24 +124,19 @@ class LineChart extends React.Component {
             containLabel: true,
         }, //边距
         xAxis: {
-            data: this.xData,
+            show: true,
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
         },
-        yAxis: {},
+        yAxis: {
+            show: true,
+            type: 'value',
+        },
         series: this.series,
     };
     // 修改chart 数据
     applyData(config) {
         const option = this.chart.getOption();
-        const { title, xData, series, color, grid } = config;
-        // 应用chart 数据
-        option.title[0].text = title || '';
-        option.xAxis = {
-            data: xData || [],
-        };
-        option.series = series || [];
-        option.color = color || [];
-        option.grid = Object.assign(option.grid, grid);
-        this.chart.setOption(option);
+        this.chart.setOption(assign(option, config));
     }
     componentDidMount() {
         // 应用web component自定义的数据
@@ -108,16 +168,7 @@ class LineChart extends React.Component {
         this.initCompleted();
     }
     initChartConfig(config) {
-        const { title, color, xData, series, grid, legend, xAxis, yAxis } =
-            config;
-        this.option.color = color;
-        this.option.xAxis.data = xData;
-        this.option.series = series;
-        this.option.grid = Object.assign(this.option.grid, grid);
-        this.option.legend = Object.assign(this.option.legend, legend);
-        this.option.title = Object.assign(this.option.title, title);
-        this.option.xAxis = Object.assign(this.option.xAxis, xAxis);
-        this.option.yAxis = Object.assign(this.option.yAxis, yAxis);
+        this.option = assign(this.option, config);
     }
     initCompleted(detail) {
         const container = this.props.container;
@@ -149,58 +200,14 @@ class LineChart extends React.Component {
         const index = String(Math.random()).substring(2),
             tagName = `${LineChart.tagNamePrefix}-${index}`;
         const { html } = option;
-        const config = `{
-            ${Object.keys(html[0].config)
-                .map((key) => {
-                    return `${key} : ${transformValue(html[0].config[key])},`;
-                })
-                .join('\n')}
-              title:{
-                ${Object.keys(html[1].config)
-                    .map((key) => {
-                        return `${key} : ${transformValue(
-                            html[1].config[key]
-                        )},`;
-                    })
-                    .join('\n')}
-              },
-              grid:{
-                ${Object.keys(html[2].config)
-                    .map((key) => {
-                        return `${key} : ${transformValue(
-                            html[2].config[key]
-                        )},`;
-                    })
-                    .join('\n')}
-              },
-              legend:{
-                ${Object.keys(html[3].config)
-                    .map((key) => {
-                        return `${key} : ${transformValue(
-                            html[3].config[key]
-                        )},`;
-                    })
-                    .join('\n')}
-              },  
-              xAxis:{
-                ${Object.keys(html[4].config)
-                    .map((key) => {
-                        return `${key} : ${transformValue(
-                            html[4].config[key]
-                        )},`;
-                    })
-                    .join('\n')}
-              },  
-              yAxis:{
-                ${Object.keys(html[5].config)
-                    .map((key) => {
-                        return `${key} : ${transformValue(
-                            html[5].config[key]
-                        )},`;
-                    })
-                    .join('\n')}
-              },  
-        }`;
+        const config = JSON.stringify(
+            html.reduce((pre, cur) => {
+                return {
+                    ...pre,
+                    ...transform(cur.config),
+                };
+            }, {})
+        );
         return {
             tagName: tagName,
             html: `<${tagName}></${tagName}>`,
@@ -216,7 +223,6 @@ class LineChart extends React.Component {
                        return this.that.option
                     }
                     set config(value){
-                        console.log('value',value)
                         const {title,xData,series,grid} = value || {};
                         this.that.applyData({title,xData,series,grid});
                     }   

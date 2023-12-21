@@ -1,171 +1,277 @@
 const BAR_CHART_CONFIG = {
     className: 'BarChart',
-    tag: '',
     html: [
         {
-            name: '基础配置',
+            name: '颜色配置',
             config: {
                 color: {
                     type: 'colors',
                     value: [
-                        '#5470c6',
-                        '#91cc75',
-                        '#fac858',
-                        '#ee6666',
-                        '#73c0de',
-                        '#3ba272',
-                        '#fc8452',
-                        '#9a60b4',
-                        '#ea7ccc',
+                        '#f48282',
+                        '#f8de83',
+                        '#9dc9ff',
+                        '#a2d5ea',
+                        '#b8c5dd',
+                        '#5c81b1',
+                        '#f7c0c0',
+                        '#b4d0e8',
+                        '#f1a26e',
                     ],
-                },
-                xData: {
-                    type: 'json',
-                    value: '["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]',
-                },
-                series: {
-                    type: 'json',
-                    value: '[{"type":"bar","name":"KFC","data":[193,234,310,1215,1341,3818,400]},{"type":"bar","name":"M记","data":[193,234,310,1215,1341,4681,400]}]',
                 },
             },
         },
         {
-            name: 'title',
+            name: 'title配置项',
             config: {
-                show: {
-                    type: 'boolean',
-                    value: true,
-                },
-                text: {
-                    type: 'string',
-                    value: '',
-                },
-                link: {
-                    type: 'string',
-                    value: '',
-                },
-                left: {
-                    type: 'select',
-                    options: [
-                        { label: 'left', value: 'left' },
-                        { label: 'right', value: 'right' },
-                        { label: 'center', value: 'center' },
-                    ],
-                    value: 'left',
-                },
-                top: {
-                    type: 'select',
-                    options: [
-                        { label: 'top', value: 'top' },
-                        { label: 'middle', value: 'middle' },
-                        { label: 'bottom', value: 'bottom' },
-                    ],
-                    value: 'top',
+                title: {
+                    type: 'object-config',
+                    value: {
+                        show: {
+                            type: 'boolean',
+                            value: false,
+                        },
+                        text: {
+                            type: 'string',
+                            value: 'title',
+                        },
+                        link: {
+                            type: 'string',
+                            value: '',
+                        },
+                        left: {
+                            type: 'extend-select',
+                            options: [
+                                { label: 'auto', value: 'auto' },
+                                { label: 'left', value: 'left' },
+                                { label: 'right', value: 'right' },
+                                { label: 'center', value: 'center' },
+                            ],
+                            value: '10px',
+                        },
+
+                        top: {
+                            type: 'extend-select',
+                            options: [
+                                { label: 'auto', value: 'auto' },
+                                { label: 'top', value: 'top' },
+                                { label: 'middle', value: 'middle' },
+                                { label: 'bottom', value: 'bottom' },
+                            ],
+                            value: '10px',
+                        },
+                        right: {
+                            type: 'extend-select',
+                            options: [
+                                { label: 'auto', value: 'auto' },
+                                { label: 'left', value: 'left' },
+                                { label: 'right', value: 'right' },
+                                { label: 'center', value: 'center' },
+                            ],
+                            value: 'auto',
+                        },
+                        bottom: {
+                            type: 'extend-select',
+                            options: [
+                                { label: 'auto', value: 'auto' },
+                                { label: 'top', value: 'top' },
+                                { label: 'middle', value: 'middle' },
+                                { label: 'bottom', value: 'bottom' },
+                            ],
+                            value: 'auto',
+                        },
+                    },
                 },
             },
         },
         {
-            name: '边距',
+            name: '边距配置项',
             config: {
-                left: {
-                    type: 'slider',
-                    value: 3,
-                    min: 0,
-                    max: 100,
-                    postfix: '%',
-                },
-                top: {
-                    type: 'slider',
-                    value: 10,
-                    min: 0,
-                    max: 100,
-                    postfix: '%',
-                },
-                right: {
-                    type: 'slider',
-                    value: 4,
-                    min: 0,
-                    max: 100,
-                    postfix: '%',
-                },
-                bottom: {
-                    type: 'slider',
-                    value: 3,
-                    min: 0,
-                    max: 100,
-                    postfix: '%',
+                grid: {
+                    type: 'object-config',
+                    value: {
+                        left: {
+                            type: 'slider',
+                            value: 3,
+                            min: 0,
+                            max: 100,
+                            postfix: '%',
+                        },
+                        top: {
+                            type: 'slider',
+                            value: 10,
+                            min: 0,
+                            max: 100,
+                            postfix: '%',
+                        },
+                        right: {
+                            type: 'slider',
+                            value: 4,
+                            min: 0,
+                            max: 100,
+                            postfix: '%',
+                        },
+                        bottom: {
+                            type: 'slider',
+                            value: 3,
+                            min: 0,
+                            max: 100,
+                            postfix: '%',
+                        },
+                    },
                 },
             },
         },
         {
-            name: '图例',
+            name: '图例配置项',
             config: {
-                show: {
-                    type: 'boolean',
-                    value: true,
-                },
-                left: {
-                    type: 'extend-select',
-                    options: [
-                        { label: 'left', value: 'left' },
-                        { label: 'right', value: 'right' },
-                        { label: 'center', value: 'center' },
-                        { label: 'null', value: null },
-                    ],
-                    value: 'right',
-                },
-                right: {
-                    type: 'extend-select',
-                    options: [
-                        { label: 'left', value: 'left' },
-                        { label: 'right', value: 'right' },
-                        { label: 'center', value: 'center' },
-                        { label: 'null', value: null },
-                    ],
-                    value: 'right',
-                },
-                top: {
-                    type: 'extend-select',
-                    options: [
-                        { label: 'top', value: 'top' },
-                        { label: 'middle', value: 'middle' },
-                        { label: 'bottom', value: 'bottom' },
-                        { label: 'null', value: null },
-                    ],
-                    value: 'top',
-                },
-                bottom: {
-                    type: 'extend-select',
-                    options: [
-                        { label: 'top', value: 'top' },
-                        { label: 'middle', value: 'middle' },
-                        { label: 'bottom', value: 'bottom' },
-                        { label: 'null', value: null },
-                    ],
-                    value: 'bottom',
+                legend: {
+                    type: 'object-config',
+                    value: {
+                        show: {
+                            type: 'boolean',
+                            value: false,
+                        },
+                        orient: {
+                            type: 'select',
+                            options: [
+                                { label: 'vertical', value: 'vertical' },
+                                { label: 'horizontal', value: 'horizontal' },
+                            ],
+                            value: 'vertical',
+                        },
+                        align: {
+                            type: 'select',
+                            options: [
+                                { label: 'auto', value: 'auto' },
+                                { label: 'left', value: 'left' },
+                                { label: 'right', value: 'right' },
+                            ],
+                            value: 'auto',
+                        },
+                        left: {
+                            type: 'extend-select',
+                            options: [
+                                { label: 'left', value: 'left' },
+                                { label: 'right', value: 'right' },
+                                { label: 'center', value: 'center' },
+                                { label: 'auto', value: 'auto' },
+                            ],
+                            value: 'right',
+                        },
+                        right: {
+                            type: 'extend-select',
+                            options: [
+                                { label: 'left', value: 'left' },
+                                { label: 'right', value: 'right' },
+                                { label: 'center', value: 'center' },
+                                { label: 'auto', value: 'auto' },
+                            ],
+                            value: 'right',
+                        },
+                        top: {
+                            type: 'extend-select',
+                            options: [
+                                { label: 'top', value: 'top' },
+                                { label: 'middle', value: 'middle' },
+                                { label: 'bottom', value: 'bottom' },
+                                { label: 'auto', value: 'auto' },
+                            ],
+                            value: 'top',
+                        },
+                        bottom: {
+                            type: 'extend-select',
+                            options: [
+                                { label: 'top', value: 'top' },
+                                { label: 'middle', value: 'middle' },
+                                { label: 'bottom', value: 'bottom' },
+                                { label: 'auto', value: 'auto' },
+                            ],
+                            value: 'bottom',
+                        },
+                        data: {
+                            type: 'json',
+                            value: '["Email","Union Ads","Video Ads","Direct","Search Engine"]',
+                        },
+                    },
                 },
             },
         },
         {
             name: 'xAxis',
             config: {
-                show: {
-                    type: 'boolean',
-                    value: true,
+                xAxis: {
+                    type: 'object-config',
+                    value: {
+                        show: {
+                            type: 'boolean',
+                            value: true,
+                        },
+                        type: {
+                            type: 'select',
+                            options: [
+                                { label: 'value', value: 'value' },
+                                { label: 'category', value: 'category' },
+                                { label: 'time', value: 'time' },
+                                { label: 'log', value: 'log' },
+                            ],
+                            value: 'category',
+                        },
+                        data: {
+                            type: 'json',
+                            value: '["Brazil","Indonesia","USA","India","China","World"]',
+                        },
+                    },
                 },
             },
         },
         {
             name: 'yAxis',
             config: {
-                show: {
-                    type: 'boolean',
-                    value: true,
+                yAxis: {
+                    type: 'object-config',
+                    value: {
+                        show: {
+                            type: 'boolean',
+                            value: true,
+                        },
+                        type: {
+                            type: 'select',
+                            options: [
+                                { label: 'value', value: 'value' },
+                                { label: 'category', value: 'category' },
+                                { label: 'time', value: 'time' },
+                                { label: 'log', value: 'log' },
+                            ],
+                            value: 'value',
+                        },
+                        data: {
+                            type: 'json',
+                            value: '["Brazil","Indonesia","USA","India","China","World"]',
+                        },
+                    },
+                },
+            },
+        },
+        {
+            name: 'series',
+            config: {
+                series: {
+                    type: 'array-config',
+                    value: [
+                        {
+                            type: 'object-config',
+                            value: {
+                                data: {
+                                    type: 'json',
+                                    value: '[{"name":"2011","type":"bar","data":[18203,23489,29034,104970,131744,630230]},{"name":"2012","type":"bar","data":[19325,23438,31000,121594,134141,681807]}]',
+                                },
+                            },
+                        },
+                    ],
                 },
             },
         },
     ],
-    css: {},
     component: {
         event: [{ label: 'initCompleted', value: 'initCompleted' }],
         methods: [{ label: 'setData', value: 'setData' }],

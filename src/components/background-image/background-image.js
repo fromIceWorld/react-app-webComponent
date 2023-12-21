@@ -1,7 +1,7 @@
 import React from 'react';
 import { config } from '../../decorators/config.js';
 import { BACKGROUND_IMAGE_CONFIG } from './background-image-config.js';
-import { transformValue } from '../../common/index.js';
+import { transform } from '../../common/index.js';
 import PropTypes from 'prop-types';
 
 window['React.Component'] = React.Component;
@@ -75,15 +75,9 @@ class BackgroundImage extends React.Component {
         // web component 的索引不能递增，因为索引重置后会重复，而且cache后apply会有冲突。
         const index = String(Math.random()).substring(2),
             tagName = `${BackgroundImage.tagNamePrefix}-${index}`;
-        const { html } = option;
-        const config =
-            '{' +
-            Object.keys(html[0].config)
-                .map((key) => {
-                    return `${key} : ${transformValue(html[0].config[key])},`;
-                })
-                .join('\n') +
-            '}';
+        const { html } = option,
+            [base] = html;
+        const config = JSON.stringify(transform(base.config));
         return {
             tagName: tagName,
             html: `<${tagName}></${tagName}>`,
