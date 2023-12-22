@@ -414,7 +414,13 @@ class ChinaMapChart extends React.Component {
     }
     // 监听容器width，height
     resizeObserver() {
-        const chartObserver = new ResizeObserver(() => this.chart.resize());
+        let resizeTimeout;
+        const chartObserver = new ResizeObserver(() => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                this.chart.resize();
+            }, 500);
+        });
         chartObserver.observe(this.refs.chinaChart);
     }
     initChart() {
