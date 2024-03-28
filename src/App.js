@@ -1,8 +1,6 @@
 import React from 'react';
-import { LineChart } from './components/line-chart/line-chart';
 import './App.css';
-import { PieChart } from './components/pie-chart/pie-chart';
-import { BarChart } from './components/bar-chart/bar-chart';
+
 import { BackgroundImage } from './components/background-image/background-image';
 class App extends React.Component {
     state = { date: new Date() };
@@ -25,13 +23,13 @@ class App extends React.Component {
                 </div>
 
                 <div style={{ height: '300px' }}>
-                    <LineChart />
+                    <line-chart />
                 </div>
                 <div style={{ height: '300px' }}>
-                    <PieChart />
+                    <pie-chart />
                 </div>
                 <div style={{ height: '300px' }}>
-                    <BarChart />
+                    <bar-chart />
                 </div>
                 <div style={{ height: '300px' }}>
                     <BackgroundImage />

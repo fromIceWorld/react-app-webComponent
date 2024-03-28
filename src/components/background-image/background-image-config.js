@@ -15,7 +15,6 @@ const BACKGROUND_IMAGE_CONFIG = {
         event: [],
         methods: [],
         data: ['image'],
-        params: [],
     },
 };
 export { BACKGROUND_IMAGE_CONFIG };

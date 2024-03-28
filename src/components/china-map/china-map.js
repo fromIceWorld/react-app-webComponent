@@ -2,7 +2,7 @@ import React from 'react';
 import * as echarts from 'echarts';
 import { config } from '../../decorators/config.js';
 import { CHINA_MAP_CONFIG } from './china-map-config.js';
-import { transform } from '../../common/index.js';
+import { transform, assign } from '../../common/index.js';
 import PropTypes from 'prop-types';
 
 const mapJSON = require('../../assets/json/china.json');
@@ -21,79 +21,209 @@ class ChinaMapChart extends React.Component {
             show: false,
         },
         animationDurationUpdate: 0,
-        geo: {
-            // 作为底图，设置地图外围边框
-            map: '500000',
-            // roam: true,
-            zoom: 1, //默认显示级别
-            // scaleLimit: { min: 0, max: 3 }, //缩放级别
-            label: {
-                normal: {
-                    show: false,
+        geo: [
+            {
+                map: '500000',
+                aspectScale: 1,
+                zoom: 0.65,
+                layoutCenter: ['50%', '50%'],
+                layoutSize: '180%',
+                show: true,
+                roam: false,
+                label: {
+                    emphasis: {
+                        show: false,
+                    },
+                },
+                itemStyle: {
+                    normal: {
+                        borderColor: 'rgba(192,245,249,.8)',
+                        borderWidth: 4,
+                        shadowColor: '#6FFDFF',
+                        shadowOffsetY: 0,
+                        shadowBlur: 10,
+                        areaColor: 'rgba(29,85,139,.6)',
+                    },
                 },
                 emphasis: {
-                    show: false,
+                    areaColor: 'rgba(29,85,139,.6)',
                 },
             },
-            // 地图区域的样式设置
-            itemStyle: {
-                normal: {
-                    areaColor: '#fff0',
-                    borderWidth: 4,
-                    // borderColor: '#00468d',
-                    borderColor: '#1983d3',
+            {
+                map: '500000',
+                aspectScale: 1,
+                zoom: 0.65,
+                layoutCenter: ['50%', '50%'],
+                layoutSize: '180%',
+                show: true,
+                roam: false,
+                label: {
+                    emphasis: {
+                        show: false,
+                    },
+                },
+                itemStyle: {
+                    normal: {
+                        borderColor: 'rgba(192,245,249,.8)',
+                        borderWidth: 3,
+                        shadowColor: '#2C99F6',
+                        shadowOffsetY: 0,
+                        shadowBlur: 12,
+                        areaColor: 'rgba(29,85,139,.6)',
+                    },
                 },
                 emphasis: {
-                    show: false,
+                    areaColor: 'rgba(29,85,139,.6)',
                 },
             },
-            tooltip: {
-                show: false,
-                backgroundColor: 'white',
+            //重影
+            {
+                type: 'map',
+                map: '500000',
+                zlevel: -1,
+                aspectScale: 1,
+                zoom: 0.65,
+                layoutCenter: ['50%', '50.7%'],
+                layoutSize: '180%',
+                roam: false,
+                silent: true,
+                itemStyle: {
+                    normal: {
+                        borderWidth: 6,
+                        borderColor: 'rgba(29, 111, 165,1)',
+                        shadowColor: 'rgba(29, 111, 165,0.5)',
+                        shadowOffsetY: 15,
+                        shadowBlur: 8,
+                        areaColor: 'rgba(5,21,35,0.1)',
+                    },
+                },
             },
-            emphasis: {
-                show: false,
+            {
+                type: 'map',
+                map: '500000',
+                zlevel: -2,
+                aspectScale: 1,
+                zoom: 0.65,
+                layoutCenter: ['50%', '51.0%'],
+                layoutSize: '180%',
+                roam: false,
+                silent: true,
+                itemStyle: {
+                    normal: {
+                        borderWidth: 6,
+                        borderColor: 'rgba(29, 111, 165,1)',
+                        shadowColor: 'rgba(29, 111, 165,0.5)',
+                        shadowOffsetY: 10,
+                        shadowBlur: 8,
+                        areaColor: 'rgba(5,21,35,0.1)',
+                    },
+                },
             },
-        },
+            {
+                type: 'map',
+                map: '500000',
+                zlevel: -3,
+                aspectScale: 1,
+                zoom: 0.65,
+                layoutCenter: ['50%', '51.4%'],
+                layoutSize: '180%',
+                roam: false,
+                silent: true,
+                itemStyle: {
+                    normal: {
+                        borderWidth: 6,
+                        borderColor: 'rgba(29, 111, 165,1)',
+                        shadowColor: 'rgba(29, 111, 165,0.5)',
+                        shadowOffsetY: 10,
+                        shadowBlur: 8,
+                        areaColor: 'rgba(5,21,35,0.1)',
+                    },
+                },
+            },
+        ],
         series: [
             // 地图边界描边配置
             {
                 type: 'map',
                 map: '500000',
+                tooltip: {
+                    trigger: 'item',
+                    position: 'inside',
+                    formatter: function (item) {
+                        var tipHtml = '';
+                        tipHtml =
+                            '<div style="font-size: 16px;height: 28px;line-height: 30px;background:#000259;opacity: 0.75;border-radius: 3px;color:#fff">' +
+                            '&nbsp;&nbsp;' +
+                            item.data.name +
+                            '&nbsp;&nbsp;&nbsp;' +
+                            item.data.value +
+                            '人&nbsp;&nbsp;' +
+                            '</span>' +
+                            '</div>';
+                        return tipHtml;
+                    },
+                },
+                name: '数据',
+                aspectScale: 1,
+                zoom: 0.65, //缩放
+                showLegendSymbol: false,
                 label: {
                     normal: {
                         show: false,
                     },
                     emphasis: {
-                        color: '#fad105',
-                        // color: '#FFB370',
+                        show: false,
                     },
-                    select: {
-                        color: '#fad105',
-                        // color: '#FFB370',
-                    },
-                },
-                select: {
-                    disabled: true,
                 },
                 itemStyle: {
                     normal: {
-                        areaColor: '#00194e',
-                        borderColor: '#00468d',
+                        areaColor: {
+                            type: 'linear-gradient',
+                            x: 0,
+                            y: 300,
+                            x2: 0,
+                            y2: 0,
+                            colorStops: [
+                                {
+                                    offset: 0,
+                                    color: 'RGBA(37,108,190,1)', // 0% 处的颜色
+                                },
+                                {
+                                    offset: 1,
+                                    color: 'RGBA(15,169,195,1)', // 50% 处的颜色
+                                },
+                            ],
+                            global: true, // 缺省为 false
+                        },
+                        borderColor: '#4ECEE6',
                         borderWidth: 1,
                     },
                     emphasis: {
-                        areaColor: '#0050da',
-                    },
-                    select: {
-                        areaColor: '#0050da',
+                        // areaColor: {
+                        //     type: 'linear-gradient',
+                        //     x: 0,
+                        //     y: 300,
+                        //     x2: 0,
+                        //     y2: 0,
+                        //     colorStops: [
+                        //         {
+                        //             offset: 0,
+                        //             color: 'RGBA(37,108,190,1)', // 0% 处的颜色
+                        //         },
+                        //         {
+                        //             offset: 1,
+                        //             color: 'RGBA(15,169,195,1)', // 50% 处的颜色
+                        //         },
+                        //     ],
+                        //     global: true, // 缺省为 false
+                        // },
+                        areaColor: '#bb912c',
                     },
                 },
-                tooltip: {
-                    show: true,
-                    trigger: 'item',
-                    backgroundColor: 'white',
-                    formatter: '{b0}: {c0}1231<br />{b1}: {c1}',
+                layoutCenter: ['50%', '50%'],
+                layoutSize: '180%',
+                markPoint: {
+                    symbol: 'none',
                 },
             },
             // {
@@ -379,8 +509,9 @@ class ChinaMapChart extends React.Component {
     }
     // 修改chart 数据
     applyData(config) {
-        // 应用chart 数据
-        this.chart.setOption(config);
+        this.chart.setOption(config, {
+            notMerge: true,
+        });
     }
     componentDidMount() {
         // 应用web component自定义的数据
@@ -396,7 +527,7 @@ class ChinaMapChart extends React.Component {
     afterWebComponentInit() {
         const container = this.props.container;
         // option是 extend 的web component 组件特有的属性
-        if (!container || !container.option) {
+        if (!container || !container.config) {
             return;
         }
         this.initCompleted();
@@ -405,12 +536,12 @@ class ChinaMapChart extends React.Component {
     beforeWebComponentInit() {
         const container = this.props.container;
         // option是 extend 的web component 组件特有的属性
-        if (!container || !container.option) {
+        if (!container || !container.config) {
             return;
         }
         container.that = this;
         // 使用用户自定义配置项合并chart配置项
-        this.initChartConfig(container.option);
+        this.initChartConfig(container.config);
     }
     // 监听容器width，height
     resizeObserver() {
@@ -494,27 +625,19 @@ class ChinaMapChart extends React.Component {
                     constructor(){
                         super();
                     }
-                    get option(){
+                    get config(){
                         return ${config}
                     }
-                    get config(){
-                        return this.that.option;
+                    get option(){
+                        return this.that.chart.getOption();
                     }
-                    set config(value){
-                        const {title,data} = value || {};
-                        this.that.applyData({title,data});
+                    set option(value){
+                        this.that.applyData( value || {});
                     }   
                 };
                 customElements.define('${tagName}',ChinaMapChart${index});
                 `,
         };
     }
-    static propTypes = {
-        name: PropTypes.string.isRequired,
-        connectedCallback: true,
-    };
 }
-ChinaMapChart.propTypes = {
-    name: PropTypes.string.isRequired,
-};
 export { ChinaMapChart };

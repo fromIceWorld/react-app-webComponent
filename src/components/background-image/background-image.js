@@ -86,9 +86,6 @@ class BackgroundImage extends React.Component {
                     constructor(){
                         super();
                     }
-                    get option(){
-                        return ${config}
-                    }
                     get image(){
                         return this.that.state.backgroundImage;
                     }
@@ -100,11 +97,5 @@ class BackgroundImage extends React.Component {
                 `,
         };
     }
-    static propTypes = {
-        name: PropTypes.string.isRequired,
-    };
 }
-BackgroundImage.propTypes = {
-    name: PropTypes.string.isRequired,
-};
 export { BackgroundImage };

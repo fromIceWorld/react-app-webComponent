@@ -10,7 +10,7 @@ import { PieChart } from './components/pie-chart/pie-chart';
 import { ChinaMapChart } from './components/china-map/china-map';
 import { BackgroundImage } from './components/background-image/background-image';
 
-// import reportWebVitals from './reportWebVitals';
+import reportWebVitals from './reportWebVitals';
 
 // const root = ReactDOM.createRoot(document.getElementById('root'));
 // root.render(<App />);
@@ -22,8 +22,7 @@ import { BackgroundImage } from './components/background-image/background-image'
 // 暴露到全局
 // @ts-ignore
 
-console.log('react 应用挂载');
-const LineCharComponent = r2wc(LineChart, React, ReactDOM);
+const LineCharComponent = r2wc(LineChart, React, ReactDOM, { options: 123 });
 window['LineChartComponent'] = LineCharComponent;
 window['LineChart'] = LineChart;
 customElements.define('line-chart', LineCharComponent);
@@ -47,3 +46,5 @@ const BackgroundImageComponent = r2wc(BackgroundImage, React, ReactDOM);
 window['BackgroundImageComponent'] = BackgroundImageComponent;
 window['BackgroundImage'] = BackgroundImage;
 customElements.define('backend-image', BackgroundImageComponent);
+
+console.log('react@18.2.0 + echarts@5.4.2 应用加载');

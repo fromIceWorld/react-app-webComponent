@@ -6,6 +6,7 @@ import { LINE_CHART_CONFIG } from './line-chart-config.js';
 import { transform, assign } from '../../common/index.js';
 
 window['React.Component'] = React.Component;
+window['echarts'] = echarts;
 @config(LINE_CHART_CONFIG)
 class LineChart extends React.Component {
     static tagNamePrefix = 'line-chart';
@@ -13,60 +14,6 @@ class LineChart extends React.Component {
         super(props);
         this.state = {};
     }
-    xData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    series = [
-        {
-            name: 'Email',
-            type: 'line',
-            stack: 'Total',
-            showSymbol: false,
-            smooth: true,
-            areaStyle: {},
-
-            data: [120, 132, 101, 134, 90, 230, 210],
-        },
-        {
-            name: 'Union Ads',
-            type: 'line',
-            smooth: true,
-            lineStyle: {
-                type: 'solid',
-            },
-            stack: 'Total',
-            showSymbol: false,
-
-            data: [220, 182, 191, 234, 290, 330, 310],
-        },
-        {
-            name: 'Video Ads',
-            type: 'line',
-            smooth: true,
-            showSymbol: false,
-
-            stack: 'Total',
-            data: [150, 232, 201, 154, 190, 330, 410],
-        },
-        {
-            name: 'Direct',
-            type: 'line',
-            smooth: true,
-            showSymbol: false,
-
-            stack: 'Total',
-            data: [320, 332, 301, 334, 390, 330, 320],
-        },
-        {
-            name: 'Search Engine',
-            type: 'line',
-            stack: 'Total',
-            smooth: true,
-            showSymbol: false,
-
-            showSymbol: false,
-            smooth: true,
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
-        },
-    ];
     chart;
     option = {
         title: {
@@ -131,51 +78,123 @@ class LineChart extends React.Component {
             show: true,
             type: 'value',
         },
-        series: this.series,
+        series: [
+            {
+                name: 'Email',
+                type: 'line',
+                stack: 'Total',
+                showSymbol: false,
+                smooth: true,
+                areaStyle: {},
+
+                data: [120, 132, 101, 134, 90, 230, 210],
+            },
+            {
+                name: 'Union Ads',
+                type: 'line',
+                smooth: true,
+                lineStyle: {
+                    type: 'solid',
+                },
+                stack: 'Total',
+                showSymbol: false,
+
+                data: [220, 182, 191, 234, 290, 330, 310],
+            },
+            {
+                name: 'Video Ads',
+                type: 'line',
+                smooth: true,
+                showSymbol: false,
+
+                stack: 'Total',
+                data: [150, 232, 201, 154, 190, 330, 410],
+            },
+            {
+                name: 'Direct',
+                type: 'line',
+                smooth: true,
+                showSymbol: false,
+
+                stack: 'Total',
+                data: [320, 332, 301, 334, 390, 330, 320],
+            },
+            {
+                name: 'Search Engine',
+                type: 'line',
+                stack: 'Total',
+                smooth: true,
+                showSymbol: false,
+
+                showSymbol: false,
+                smooth: true,
+                data: [820, 932, 901, 934, 1290, 1330, 1320],
+            },
+        ],
     };
-    // 修改chart 数据
-    applyData(config) {
-        const option = this.chart.getOption();
-        this.chart.setOption(assign(option, config));
+    // 只修改数据
+    applyData(data) {
+        const { x, y } = data;
+        let options = this.chart.getOption();
+        (x || []).forEach((data, index) => {
+            options.xAxis[index].data = data;
+        });
+        (y || []).forEach((data, index) => {
+            options.series[index].data = data;
+        });
+        this.chart.setOption(options, {
+            notMerge: true,
+        });
     }
+    // 替换整个options
+    applyOptions(option) {
+        this.chart.setOption(option, {
+            notMerge: true,
+        });
+    }
+
     componentDidMount() {
-        // 应用web component自定义的数据
-        this.beforeWebComponentInit();
+        this.initChartConfig();
         // 组件自有逻辑
         this.initChart();
         this.resizeObserver();
-        // web component组件初始化数据后,其他组件事件才可以获取到当前组件内容
-        this.afterWebComponentInit();
+        this.apply();
     }
-    // 初始化echarts 之前，将 web component 配置项应用到组件上
-    beforeWebComponentInit() {
+    apply() {
         const container = this.props.container;
-        // option是 extend 的web component 组件特有的属性
-        if (!container || !container.option) {
-            return;
+        // 从 input 读取数据
+        const { data, options } = container.input || {};
+        if (data) {
+            console.log(this, this.that, data, container);
+            if (container) {
+                this.applyData(data);
+            } else {
+                this.data = data;
+            }
+        } else if (options) {
+            if (this.that) {
+                this.applyOptions(options);
+            } else {
+                this.options = options;
+            }
         }
-        container.that = this;
-        // 使用用户自定义配置项合并chart配置项
-        this.initChartConfig(container.option);
     }
-    // web components 构造子组件
-    afterWebComponentInit() {
+    initChartConfig() {
         const container = this.props.container;
-        // option是 extend 的web component 组件特有的属性
-        if (!container || !container.option) {
-            return;
+        if (container) {
+            if (
+                container.customCode &&
+                Object.keys(container.customCode).length
+            ) {
+                this.option = container.customCode;
+            } else if (
+                container.preOption &&
+                Object.keys(container.preOption).length
+            ) {
+                this.option = container.preOption;
+            }
+            container.that = this;
         }
-        this.initCompleted();
-    }
-    initChartConfig(config) {
-        this.option = assign(this.option, config);
-    }
-    initCompleted(detail) {
-        const container = this.props.container;
-        let customEvent = new CustomEvent('initCompleted', {
-            detail,
-        });
-        container.dispatchEvent(customEvent);
     }
     // 监听容器width，height
     resizeObserver() {
@@ -183,8 +202,9 @@ class LineChart extends React.Component {
         chartObserver.observe(this.refs.lineChart);
     }
     initChart() {
-        this.chart = echarts.init(this.refs.lineChart);
-        this.chart.setOption(this.option);
+        let chart = echarts.init(this.refs.lineChart);
+        chart.setOption(this.option);
+        this.chart = chart;
     }
     render() {
         return (
@@ -200,31 +220,43 @@ class LineChart extends React.Component {
         const index = String(Math.random()).substring(2),
             tagName = `${LineChart.tagNamePrefix}-${index}`;
         const { html } = option;
-        const config = JSON.stringify(
-            html.reduce((pre, cur) => {
-                return {
-                    ...pre,
-                    ...transform(cur.config),
-                };
-            }, {})
-        );
+        let jsonString = html[0].config.list.value,
+            customCode = html[1].config.code.value.trim();
         return {
             tagName: tagName,
             html: `<${tagName}></${tagName}>`,
             js: `class LineChart${index} extends LineChartComponent{
-                    that;
                     constructor(){
                         super();
                     }
+                    static get observedAttributes() {
+                        return ['input'];
+                    }
+                    input
+                    attributeChangedCallback(name, oldValue, newValue) {
+                        if(name == 'input'){
+                            this.input = JSON.parse(newValue);
+                            if(this.that){
+                                this.that.apply()
+                            }
+                            
+                        }
+                    }
+                    get preOption(){
+                        let option = {};
+                        ((echarts) => {${jsonString}})(echarts);
+                        return option;
+                    }
+                    get customCode(){
+                        let option = {};
+                        ((echarts) => {${customCode}})(echarts);
+                        return option;
+                    }
                     get option(){
-                        return ${config}
+                        return this.that.chart.getOption()
                     }
-                    get config(){
-                       return this.that.option
-                    }
-                    set config(value){
-                        const {title,xData,series,grid} = value || {};
-                        this.that.applyData({title,xData,series,grid});
+                    set option(value){
+                        this.that.applyData(value || {});
                     }   
                 };
                 customElements.define('${tagName}',LineChart${index});

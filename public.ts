@@ -6,6 +6,7 @@
 const components = [
         {
             id: 'line-chart',
+            name: '折线图',
             type: 'node',
             icon: '#icon-tubiao-zhexiantu',
             title: `折线图:
@@ -18,6 +19,7 @@ const components = [
         },
         {
             id: 'bar-chart',
+            name: '柱状图',
             type: 'node',
             icon: '#icon-zhuzhuangtu',
             title: `柱状图:
@@ -30,6 +32,7 @@ const components = [
         },
         {
             id: 'pie-chart',
+            name: '饼状图',
             type: 'node',
             icon: '#icon-bingzhuangtu',
             title: `饼状图:
@@ -42,6 +45,7 @@ const components = [
         },
         {
             id: 'china-map',
+            name: 'echarts地图',
             type: 'node',
             icon: '#icon-a-2',
             title: `地图:

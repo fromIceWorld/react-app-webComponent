@@ -3,13 +3,14 @@ import * as echarts from 'echarts';
 import { config } from '../../decorators/config.js';
 import { BAR_CHART_CONFIG } from './bar-chart-config.js';
 import { transform, assign } from '../../common/index.js';
-
+window['echarts'] = echarts;
 window['React.Component'] = React.Component;
 @config(BAR_CHART_CONFIG)
 class BarChart extends React.Component {
     static tagNamePrefix = 'bar-chart';
     constructor(props) {
         super(props);
+        console.log(props);
         this.state = {};
     }
     chart;
@@ -69,12 +70,12 @@ class BarChart extends React.Component {
             containLabel: true,
         }, //边距
         xAxis: {
-            type: 'value',
-            data: [],
+            type: 'category',
+            data: ['Brazil', 'Indonesia', 'USA', 'India', 'China', 'World'],
         },
         yAxis: {
-            type: 'category',
-            value: ['Brazil', 'Indonesia', 'USA', 'India', 'China', 'World'],
+            type: 'value',
+            value: [],
         },
         series: [
             {
@@ -89,49 +90,77 @@ class BarChart extends React.Component {
             },
         ],
     };
-    // 修改chart 数据
-    applyData(config) {
-        const option = this.chart.getOption();
-        this.chart.setOption(assign(option, config));
+    // 只修改数据
+    applyData(data) {
+        const { x, y } = data;
+        let options = this.chart.getOption();
+        (x || []).forEach((data, index) => {
+            options.xAxis[index].data = data;
+        });
+        (y || []).forEach((data, index) => {
+            options.series[index].data = data;
+        });
+        this.chart.setOption(options, {
+            notMerge: true,
+        });
+    }
+    // 替换整个options
+    applyOptions(option) {
+        this.chart.setOption(option, {
+            notMerge: true,
+        });
+    }
+    componentWillReveiceProps(nextProps) {
+        console.log(nextProps);
+    }
+    componentDidUpdate(nextProps) {
+        console.log(nextProps);
     }
     componentDidMount() {
-        // 应用web component自定义的数据
-        this.beforeWebComponentInit();
+        this.initChartConfig();
         // 组件自有逻辑
         this.initChart();
         this.resizeObserver();
-        // web component组件初始化数据后,其他组件事件才可以获取到当前组件内容
-        this.afterWebComponentInit();
+        this.apply();
     }
-    // 初始化echarts 之前，将 web component 配置项应用到组件上
-    beforeWebComponentInit() {
+    apply() {
         const container = this.props.container;
-        // option是 extend 的web component 组件特有的属性
-        if (!container || !container.option) {
-            return;
+        // 从 input 读取数据
+        const { data, options } = container.input || {};
+        if (data) {
+            console.log(this, this.that, data, container);
+            if (container) {
+                this.applyData(data);
+            } else {
+                this.data = data;
+            }
+        } else if (options) {
+            if (this.that) {
+                this.applyOptions(options);
+            } else {
+                this.options = options;
+            }
         }
-        container.that = this;
-        // 使用用户自定义配置项合并chart配置项
-        this.initChartConfig(container.option);
     }
-    // web components 构造子组件
-    afterWebComponentInit() {
+    initChartConfig() {
         const container = this.props.container;
-        // option是 extend 的web component 组件特有的属性
-        if (!container || !container.option) {
-            return;
+        if (container) {
+            if (
+                container.customCode &&
+                Object.keys(container.customCode).length
+            ) {
+                this.option = container.customCode;
+            } else if (
+                container.preOption &&
+                Object.keys(container.preOption).length
+            ) {
+                this.option = container.preOption;
+            }
+            container.that = this;
         }
-        this.initCompleted();
     }
-    initChartConfig(config) {
-        this.option = assign(this.option, config);
-    }
-    initCompleted(detail) {
-        const container = this.props.container;
-        let customEvent = new CustomEvent('initCompleted', {
-            detail,
-        });
-        container.dispatchEvent(customEvent);
+    set options(value) {
+        console.log(value);
     }
     // 监听容器width，height
     resizeObserver() {
@@ -146,6 +175,7 @@ class BarChart extends React.Component {
     render() {
         return (
             <div
+                type={this.props.name}
                 className="bar-chart"
                 ref="barChart"
                 style={{ width: '100%', height: '100%' }}
@@ -157,40 +187,48 @@ class BarChart extends React.Component {
         const index = String(Math.random()).substring(2),
             tagName = `${BarChart.tagNamePrefix}-${index}`;
         const { html } = option;
-        const config = JSON.stringify(
-            html.reduce((pre, cur) => {
-                return {
-                    ...pre,
-                    ...transform(cur.config),
-                };
-            }, {})
-        );
+        let jsonString = html[0].config.list.value,
+            customCode = html[1].config.code.value.trim();
         return {
             tagName: tagName,
             html: `<${tagName}></${tagName}>`,
             js: `class BarChart${index} extends BarChartComponent{
-                    that;
-                    constructor(){
-                        super();
+                    constructor(props){
+                        super(props);
+                    }
+                    static get observedAttributes() {
+                        return ['input'];
+                    }
+                    input
+                    attributeChangedCallback(name, oldValue, newValue) {
+                        if(name == 'input'){
+                            this.input = JSON.parse(newValue);
+                            if(this.that){
+                                this.that.apply()
+                            }
+                            
+                        }
+                    }
+                    get preOption(){
+                        let option = {};
+                        ((echarts) => {${jsonString}})(echarts);
+                        return option;
+                    }
+                    get customCode(){
+                        let option = {};
+                        ((echarts) => {${customCode}})(echarts);
+                        return option;
                     }
                     get option(){
-                        return ${config}
+                        return this.that.chart.getOption()
                     }
-                    get config(){
-                        return this.that.option;
-                    }
-                    set config(value){
-                        console.log('value',value)
-                        const {title, xData, series, width, height} = value || {};
-                        this.that.applyData({title, xData, series, width, height});
+                    set option(value){
+                        this.that.applyData(value || {});
                     }   
                 };
                 customElements.define('${tagName}',BarChart${index});
                 `,
         };
     }
-    // static propTypes = {
-    //     name: PropTypes.string.isRequired,
-    // };
 }
 export { BarChart };
