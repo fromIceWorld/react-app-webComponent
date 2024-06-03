@@ -91,6 +91,18 @@ class PieChart extends React.Component {
             },
         ],
     };
+    /**
+     * 
+     * @param {*} data
+     * 
+     * [
+        { value: 1048, name: 'Search Engine' },
+        { value: 735, name: 'Direct' },
+        { value: 580, name: 'Email' },
+        { value: 484, name: 'Union Ads' },
+        { value: 300, name: 'Video Ads' }
+      ] 
+     */
     // 只修改数据
     applyData(data) {
         let options = this.chart.getOption();
@@ -210,8 +222,11 @@ class PieChart extends React.Component {
                         return this.that.chart.getOption()
                     }
                     set option(value){
-                        this.that.applyData(value || {});
+                        this.that.chart.setOption(value || {});
                     } 
+                    set data(value){
+                        this.that.applyData(value || {});
+                    }
                 };
                 customElements.define('${tagName}',PieChart${index});
                 `,

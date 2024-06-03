@@ -44,45 +44,45 @@ const components = [
             component: 'PieChart',
         },
         {
+            id: 'three-pie-chart',
+            name: '3d饼状图',
+            type: 'node',
+            icon: '#icon-bingzhuangtu',
+            title: `3d饼状图:
+                        react@18+echarts`,
+            view: 0,
+            family: 'chart',
+            color: '#61dafb',
+            des: '3d饼状图',
+            component: 'ThreePieChart',
+        },
+        {
             id: 'china-map',
             name: 'echarts地图',
             type: 'node',
             icon: '#icon-a-2',
             title: `地图:
                         react@18+echarts`,
-            view: 4,
+            view: 0,
             family: 'chart',
             color: '#61dafb',
             des: '基础的地图',
             component: 'ChinaMapChart',
         },
-        // {
-        //     id: 'backend-image',
-        //     type: 'node',
-        //     icon: '#icon-beijing',
-        //     title: `背景图:
-        //                 react@18+echarts`,
-        //     view: 4,
-        //     family: 'chart',
-        //     color: '#61dafb',
-        //     des: '基础的背景图',
-        //     component: 'BackgroundImage',
-        // },
     ],
-    fileJS = './build/static/js/',
-    fileCSS = './build/static/css/';
+    folderPath = './build';
 const fs = require('fs'),
+    http = require('http'),
     path = require('path'),
     request = require('request');
 const filesName = [
     {
+        name: 'static/js/main.js',
         decorator: { defer: true },
-        name: 'main.js',
     },
-    'main.css',
+    'static/css/main.css',
 ];
-const area = 'react',
-    folderPath = './dist';
+const area = 'react';
 components.map((item) => {
     item['filesName'] = filesName;
     item['area'] = area;
@@ -90,7 +90,6 @@ components.map((item) => {
 let options = {
     url: 'http://127.0.0.1:3000/upload',
     method: 'POST',
-    json: true,
     headers: {
         'content-type': 'multipart/form-data',
     },

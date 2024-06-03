@@ -69,4 +69,4 @@ function assign(origin, source) {
     return origin;
 }
 
-export { transform, assign };
+export { transform, assign, transformValue };

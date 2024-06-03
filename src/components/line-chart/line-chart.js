@@ -133,14 +133,21 @@ class LineChart extends React.Component {
         ],
     };
     // 只修改数据
+    /**
+     *
+     * @param {x} data = {
+     *   x:[1,2,3,4],
+     *   y:[[1,2,3,4], [5,6,7,8]]
+     * }
+     *
+     */
     applyData(data) {
         const { x, y } = data;
         let options = this.chart.getOption();
-        (x || []).forEach((data, index) => {
-            options.xAxis[index].data = data;
-        });
-        (y || []).forEach((data, index) => {
-            options.series[index].data = data;
+        options.xAxis[0].data = x;
+        options.series.splice(y.length);
+        options.series.forEach((item, index) => {
+            item.data = y[index];
         });
         this.chart.setOption(options, {
             notMerge: true,
@@ -256,7 +263,10 @@ class LineChart extends React.Component {
                         return this.that.chart.getOption()
                     }
                     set option(value){
-                        this.that.applyData(value || {});
+                        this.that.chart.setOption(value || {});
+                    }
+                    set data(value){
+                        this.that.applyData(value)
                     }   
                 };
                 customElements.define('${tagName}',LineChart${index});

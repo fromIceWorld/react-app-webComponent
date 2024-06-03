@@ -381,7 +381,7 @@ const BAR_CHART_CONFIG = {
         input: ['data', 'options'],
         event: [],
         methods: [],
-        data: ['option'],
+        data: ['option', 'data'],
     },
 };
 export { BAR_CHART_CONFIG };

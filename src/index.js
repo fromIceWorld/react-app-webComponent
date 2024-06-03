@@ -8,12 +8,11 @@ import { LineChart } from './components/line-chart/line-chart';
 import { BarChart } from './components/bar-chart/bar-chart';
 import { PieChart } from './components/pie-chart/pie-chart';
 import { ChinaMapChart } from './components/china-map/china-map';
-import { BackgroundImage } from './components/background-image/background-image';
+import { ChartImage } from './components/chart-image/chart-image';
+import { ThreePieChart } from './components/three-pie-chart/three-pie-chart';
 
-import reportWebVitals from './reportWebVitals';
-
-// const root = ReactDOM.createRoot(document.getElementById('root'));
-// root.render(<App />);
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
@@ -22,29 +21,42 @@ import reportWebVitals from './reportWebVitals';
 // 暴露到全局
 // @ts-ignore
 
+function registryCustomElements(tagName, cla) {
+    if (customElements.get(tagName)) {
+        console.warn(`企图注册相同名称的标签: ${tagName}`);
+        return;
+    }
+    customElements.define(tagName, cla);
+}
+
 const LineCharComponent = r2wc(LineChart, React, ReactDOM, { options: 123 });
 window['LineChartComponent'] = LineCharComponent;
 window['LineChart'] = LineChart;
-customElements.define('line-chart', LineCharComponent);
+registryCustomElements('line-chart', LineCharComponent);
 
 const BarChartComponent = r2wc(BarChart, React, ReactDOM);
 window['BarChartComponent'] = BarChartComponent;
 window['BarChart'] = BarChart;
-customElements.define('bar-chart', BarChartComponent);
+registryCustomElements('bar-chart', BarChartComponent);
 
 const PieChartComponent = r2wc(PieChart, React, ReactDOM);
 window['PieChartComponent'] = PieChartComponent;
 window['PieChart'] = PieChart;
-customElements.define('pie-chart', PieChartComponent);
+registryCustomElements('pie-chart', PieChartComponent);
+
+const ChartImageComponent = r2wc(ChartImage, React, ReactDOM);
+window['ChartImageComponent'] = ChartImageComponent;
+window['ChartImage'] = ChartImage;
+registryCustomElements('chart-image', ChartImageComponent);
 
 const ChinaMapChartComponent = r2wc(ChinaMapChart, React, ReactDOM);
 window['ChinaMapChartComponent'] = ChinaMapChartComponent;
 window['ChinaMapChart'] = ChinaMapChart;
-customElements.define('china-map-chart', ChinaMapChartComponent);
+registryCustomElements('china-map-chart', ChinaMapChartComponent);
 
-const BackgroundImageComponent = r2wc(BackgroundImage, React, ReactDOM);
-window['BackgroundImageComponent'] = BackgroundImageComponent;
-window['BackgroundImage'] = BackgroundImage;
-customElements.define('backend-image', BackgroundImageComponent);
+const ThreePieChartComponent = r2wc(ThreePieChart, React, ReactDOM);
+window['ThreePieChartComponent'] = ThreePieChartComponent;
+window['ThreePieChart'] = ThreePieChart;
+registryCustomElements('three-pie-chart', ThreePieChartComponent);
 
 console.log('react@18.2.0 + echarts@5.4.2 应用加载');

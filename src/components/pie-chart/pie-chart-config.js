@@ -463,7 +463,7 @@ const PIE_CHART_CONFIG = {
         input: ['data', 'options'],
         event: [],
         methods: [{ label: 'setData', value: 'setData' }],
-        data: ['option'],
+        data: ['option', 'data'],
     },
 };
 export { PIE_CHART_CONFIG };

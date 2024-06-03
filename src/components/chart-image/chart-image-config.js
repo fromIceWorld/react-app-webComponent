@@ -1,4 +1,4 @@
-const CHINA_MAP_CONFIG = {
+const CHART_IMAGE_CONFIG = {
     className: 'ChinaMapChart',
     html: [
         {
@@ -51,4 +51,4 @@ const CHINA_MAP_CONFIG = {
         params: [],
     },
 };
-export { CHINA_MAP_CONFIG };
+export { CHART_IMAGE_CONFIG };

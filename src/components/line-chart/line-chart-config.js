@@ -388,7 +388,7 @@ const LINE_CHART_CONFIG = {
         input: ['data', 'options'],
         event: [],
         methods: [],
-        data: ['option'],
+        data: ['option', 'data'],
     },
 };
 export { LINE_CHART_CONFIG };

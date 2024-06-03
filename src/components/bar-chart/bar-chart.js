@@ -94,11 +94,10 @@ class BarChart extends React.Component {
     applyData(data) {
         const { x, y } = data;
         let options = this.chart.getOption();
-        (x || []).forEach((data, index) => {
-            options.xAxis[index].data = data;
-        });
-        (y || []).forEach((data, index) => {
-            options.series[index].data = data;
+        options.xAxis[0].data = x;
+        options.series.splice(y.length);
+        options.series.forEach((item, index) => {
+            item.data = y[index];
         });
         this.chart.setOption(options, {
             notMerge: true,
@@ -223,7 +222,7 @@ class BarChart extends React.Component {
                         return this.that.chart.getOption()
                     }
                     set option(value){
-                        this.that.applyData(value || {});
+                        this.that.chart.setOption(value || {});
                     }   
                 };
                 customElements.define('${tagName}',BarChart${index});

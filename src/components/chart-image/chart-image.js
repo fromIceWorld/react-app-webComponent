@@ -1,21 +1,47 @@
 import React from 'react';
 import * as echarts from 'echarts';
 import { config } from '../../decorators/config.js';
-import { CHINA_MAP_CONFIG } from './china-map-config.js';
-import { transform, assign } from '../../common/index.js';
-import { options } from './options/index.js';
-import PropTypes from 'prop-types';
-@config(CHINA_MAP_CONFIG)
-class ChinaMapChart extends React.Component {
-    static tagNamePrefix = 'china-map-chart';
+import { CHART_IMAGE_CONFIG } from './chart-image-config.js';
+
+@config(CHART_IMAGE_CONFIG)
+class ChartImage extends React.Component {
+    static tagNamePrefix = 'chart-image';
     chart;
     carousel = false; // 开启轮播
     roadmap = false; // 路线图
     heatmap = false; // 热力图
-    type = 'world';
-    area = 'world';
     // echart 的option 配置
-    option = options[this.type];
+    area = 'world';
+    type = 'world';
+    option = {
+        geo: {
+            type: 'map',
+            map: '500000', // 使用世界地图
+            show: true,
+            itemStyle: {
+                normal: {
+                    areaColor: '#fff0',
+                    borderWidth: 0,
+                },
+            },
+        },
+        series: [
+            {
+                layoutCenter: ['50%', '50%'], //地图位置
+                type: 'map',
+                map: '500000', // 使用世界地图
+                itemStyle: {
+                    normal: {
+                        areaColor: '#fff0',
+                        borderWidth: 0,
+                    },
+                },
+                // zoom: 1.04,
+                // // top: 90,
+                // aspectScale: 0.8,
+            },
+        ],
+    };
     set linesData(list) {
         this.setData('lines', list);
     }
@@ -26,7 +52,7 @@ class ChinaMapChart extends React.Component {
         this.setData('heatmap', list);
     }
     getMapJSON(type) {
-        return require(`../../assets/json/${type}.json`);
+        return require(`../../assets/json/world.json`);
     }
     // 清除涟漪点数据
     clearEffectScatter() {
@@ -62,6 +88,8 @@ class ChinaMapChart extends React.Component {
                 break;
         }
         serie.data = data;
+        console.log(data);
+
         this.chart.setOption(option);
     }
     clearData(type) {
@@ -183,7 +211,6 @@ class ChinaMapChart extends React.Component {
     initChartConfig(type, area) {
         this.type = type;
         this.area = area;
-        this.option = options[type];
     }
     // 修改chart 数据
     applyData(config) {
@@ -231,14 +258,64 @@ class ChinaMapChart extends React.Component {
                 this.chart.resize();
             }, 500);
         });
-        chartObserver.observe(this.refs.chinaChart);
+        chartObserver.observe(this.refs.chartImage);
     }
+    dynamicBG() {
+        let canvas = this.refs.chartImage,
+            image = this.refs.image;
+        window.addEventListener('resize', () => {
+            var i = canvas.offsetWidth / canvas.offsetHeight;
+            if (i > 2.107) {
+                image.style.backgroundSize =
+                    image.offsetHeight * 0.795 * 2.107 + 'px 85.2%';
+            } else {
+                image.style.backgroundSize =
+                    '82% ' + (image.offsetWidth * 0.88) / 2.107 + 'px';
+            }
+            this.chart.resize();
+            // 当窗口尺寸变化时，会执行这里的代码
+        });
 
+        // console.log(this.refs.chartImage, this.refs.image);
+        // let mapCanvas = this.refs.chartImage.querySelector('canvas');
+
+        // let observer = new ResizeObserver(() => {
+        //     var i = mapCanvas.offsetWidth / mapCanvas.offsetHeight;
+        //     if (i > 2.107) {
+        //         this.refs.image.style.backgroundSize =
+        //             this.refs.image.offsetHeight * 0.795 * 2.107 + 'px 85.2%';
+        //     } else {
+        //         this.refs.image.style.backgroundSize =
+        //             '82% ' +
+        //             (this.refs.image.offsetWidth * 0.88) / 2.107 +
+        //             'px';
+        //     }
+        //     this.chart.resize();
+        // });
+        // observer.observe(mapCanvas);
+        // canvas.style['background-image'] = 'url(store/react/map1.png)';
+        // canvas.style.backgroundRepeat = 'no-repeat';
+        // canvas.style['background-position-x'] = '54%';
+        // canvas.style['background-position-y'] = '92px';
+        // // canvas.style['background-size'] = 'auto 100%';
+        // let observer = new ResizeObserver(() => {
+        //     if (canvas.offsetWidth / canvas.offsetHeight > 2) {
+        //         canvas.style['background-size'] = `${
+        //             canvas.offsetWidth * 0.7453416149068323
+        //         }px ${canvas.offsetHeight * 0.683}px`;
+        //     } else {
+        //         canvas.style['background-size'] = `${
+        //             canvas.offsetWidth * 0.75
+        //         }px`;
+        //     }
+        // });
+        // observer.observe(canvas);
+    }
     initChart() {
         echarts.registerMap('500000', {
             geoJSON: this.getMapJSON(this.area),
         });
-        this.chart = echarts.init(this.refs.chinaChart);
+        this.chart = echarts.init(this.refs.chartImage);
         this.chart.setOption(this.option);
         window.addEventListener('resize', () => this.chart.resize());
         // 启动轮播
@@ -300,41 +377,26 @@ class ChinaMapChart extends React.Component {
                     }}
                 ></div>
                 <div
-                    className="china-chart"
-                    ref="chinaChart"
-                    style={{ height: '100%' }}
+                    className="chart-image"
+                    ref="chartImage"
+                    style={{
+                        height: '100%',
+                    }}
                 ></div>
             </div>
         );
     }
-    dynamicBG() {
-        let canvas = this.refs.chinaChart,
-            image = this.refs.image;
-
-        let observer = new ResizeObserver(() => {
-            var i = canvas.offsetWidth / canvas.offsetHeight;
-            if (i > 2.107) {
-                image.style.backgroundSize =
-                    image.offsetHeight * 0.795 * 2.107 + 'px 85.2%';
-            } else {
-                image.style.backgroundSize =
-                    '82% ' + (image.offsetWidth * 0.88) / 2.107 + 'px';
-            }
-            this.chart.resize();
-        });
-        observer.observe(canvas);
-    }
     static extends(option) {
         // web component 的索引不能递增，因为索引重置后会重复，而且cache后apply会有冲突。
         const index = String(Math.random()).substring(2),
-            tagName = `${ChinaMapChart.tagNamePrefix}-${index}`;
+            tagName = `${ChartImage.tagNamePrefix}-${index}`;
         const { html } = option;
         const type = html[0].config.type.value;
         const area = html[0].config.area.value;
         return {
             tagName: tagName,
             html: `<${tagName} _methods="that"></${tagName}>`,
-            js: `class ChinaMapChart${index} extends ChinaMapChartComponent{
+            js: `class ChartImage${index} extends ChartImageComponent{
                     constructor(){
                         super();
                     }
@@ -357,9 +419,9 @@ class ChinaMapChart extends React.Component {
                         this.that.setData('effectScatter',scatters)
                     }   
                 };
-                customElements.define('${tagName}',ChinaMapChart${index});
+                customElements.define('${tagName}',ChartImage${index});
                 `,
         };
     }
 }
-export { ChinaMapChart };
+export { ChartImage };
