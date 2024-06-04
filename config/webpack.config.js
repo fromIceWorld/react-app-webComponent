@@ -1,5 +1,5 @@
 'use strict';
-
+const { ModuleFederationPlugin } = require('webpack').container;
 const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
@@ -773,6 +773,30 @@ module.exports = function (webpackEnv) {
                         },
                     },
                 }),
+            new ModuleFederationPlugin({
+                // 应用名，全局唯一，不可冲突。
+                name: 'react_app',
+                // 暴露的文件名称
+                filename: 'remoteEntry.js',
+                // 远程应用暴露出的模块名。
+                exposes: {
+                    './BarChart': paths.resolveApp(
+                        'src/components/bar-chart/bar-chart.js'
+                    ),
+                },
+                remotes: {
+                    vue_element:
+                        'vue_element@http://localhost:8080/remoteEntry.js',
+                },
+                // 依赖包 依赖的包 webpack在加载的时候会先判断本地应用是否存在对应的包，如果不存在，则加载远程应用的依赖包。
+                shared: {
+                    // react: {
+                    //     eager: true,
+                    //     requiredVersion: '^18.2.0',
+                    //     singleton: true,
+                    // },
+                },
+            }),
         ].filter(Boolean),
         // Turn off performance processing because we utilize
         // our own hints via the FileSizeReporter

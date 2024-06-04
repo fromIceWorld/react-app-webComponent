@@ -11,6 +11,17 @@ import { ChinaMapChart } from './components/china-map/china-map';
 import { ChartImage } from './components/chart-image/chart-image';
 import { ThreePieChart } from './components/three-pie-chart/three-pie-chart';
 
+require('systemjs');
+// import MyTree from 'vue_element/MyTree'; // federated import
+// console.log(MyTree);
+import('vue_element/MyTree').then((res) => {
+    console.log(res);
+    const { MyTreeComponent, MyTree, app } = res;
+    // customElements.define('my-vue-tree', MyTreeComponent);
+    document.body.append(document.createElement('my-vue-tree'));
+    app.mount('my-vue-tree');
+});
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<App />);
 
