@@ -34,8 +34,17 @@ export const world_option = {
 
         itemStyle: {
             normal: {
+                label: {
+                    show: true,
+                },
                 areaColor: '#fff0',
                 borderWidth: 0,
+            },
+            emphasis: {
+                label: {
+                    show: true,
+                },
+                areaColor: '#fff0',
             },
         },
         regions: [
@@ -89,12 +98,12 @@ export const world_option = {
                 },
             },
             data: [
-                [
-                    { coord: [113.33, 22.13] },
-                    {
-                        coord: [25.748151, 61.92],
-                    },
-                ],
+                // [
+                //     { coord: [113.33, 22.13] },
+                //     {
+                //         coord: [25.748151, 61.92],
+                //     },
+                // ],
             ],
         },
         {
@@ -102,10 +111,10 @@ export const world_option = {
             type: 'effectScatter',
             coordinateSystem: 'geo',
             data: [
-                {
-                    name: '苏尼特左旗',
-                    value: [113.653412, 73.854108, 4500, 1],
-                },
+                // {
+                //     name: '苏尼特左旗',
+                //     value: [113.653412, 73.854108, 4500, 1],
+                // },
             ],
             symbol: (value, params) => {
                 return value[3] == 'source'
