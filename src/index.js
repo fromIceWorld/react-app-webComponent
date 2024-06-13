@@ -1,6 +1,7 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { React } from 'react';
+import ReactDOM from 'react-dom';
 import r2wc from 'react-to-webcomponent';
+import { createRoot } from 'react-dom/client';
 
 import './index.css';
 import App from './App';
@@ -14,16 +15,20 @@ import { ThreePieChart } from './components/three-pie-chart/three-pie-chart';
 require('systemjs');
 // import MyTree from 'vue_element/MyTree'; // federated import
 // console.log(MyTree);
-import('vue_element/MyTree').then((res) => {
-    console.log(res);
-    const { MyTreeComponent, MyTree, app } = res;
-    // customElements.define('my-vue-tree', MyTreeComponent);
-    document.body.append(document.createElement('my-vue-tree'));
-    app.mount('my-vue-tree');
-});
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
+const script = document.createElement('script');
+script.src = 'http://localhost:3002/remoteEntry.js';
+document.body.append(script);
+setTimeout(() => {
+    const container = window['react_app'];
+    container.init();
+    container.get('BarChartComponent').then((fn) => {
+        const federated = fn();
+        const createApp = federated['createApp'];
+        createApp({}, document.body);
+    });
+}, 500);
+const app = createRoot(document.getElementById('root'));
+app.render(<App />);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

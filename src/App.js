@@ -18,7 +18,7 @@ class App extends React.Component {
     render() {
         return (
             <div className="App" ref="app" style={{ height: '100%' }}>
-                <div style={{ height: '100%' }}>
+                {/* <div style={{ height: '100%' }}>
                     <chart-image></chart-image>
                 </div>
                 <div style={{ height: '100%' }}>
@@ -36,7 +36,7 @@ class App extends React.Component {
                 </div>
                 <div style={{ height: '208px' }}>
                     <three-pie-chart />
-                </div>
+                </div> */}
             </div>
         );
     }

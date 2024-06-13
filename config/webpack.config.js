@@ -780,8 +780,8 @@ module.exports = function (webpackEnv) {
                 filename: 'remoteEntry.js',
                 // 远程应用暴露出的模块名。
                 exposes: {
-                    './BarChart': paths.resolveApp(
-                        'src/components/bar-chart/bar-chart.js'
+                    BarChart: paths.resolveApp(
+                        'src/components/bar-chart/bar-chart.bootstrap.js'
                     ),
                 },
                 remotes: {

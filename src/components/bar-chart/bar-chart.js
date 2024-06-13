@@ -176,7 +176,6 @@ class BarChart extends React.Component {
             <div
                 type={this.props.name}
                 className="bar-chart"
-                ref="barChart"
                 style={{ width: '100%', height: '100%' }}
             ></div>
         );
