@@ -31,20 +31,23 @@ export const world_option = {
         show: true,
         map: '500000',
         type: 'map',
-
+        // zoom: 0.94,
+        // top: 80,
+        center: [-18, 13],
+        aspectScale: 0.76,
         itemStyle: {
             normal: {
                 label: {
                     show: true,
                 },
-                areaColor: '#fff0',
+                areaColor: '#ff0000a3',
                 borderWidth: 0,
             },
             emphasis: {
                 label: {
                     show: true,
                 },
-                areaColor: '#fff0',
+                areaColor: '#fff',
             },
         },
         regions: [

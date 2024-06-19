@@ -11,8 +11,8 @@ import { ChinaMapChart } from './components/china-map/china-map';
 import { ChartImage } from './components/chart-image/chart-image';
 import { ThreePieChart } from './components/three-pie-chart/three-pie-chart';
 
-// const root = ReactDOM.createRoot(document.getElementById('root'));
-// root.render(<App />);
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
